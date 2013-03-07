@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     6 mars 2013 11:23:20                                                        
+
+     AgalCompiler    
+     description
+                   
+     lepersp                                                                
+     ====================================================================== -->
+<project name="AgalCompiler" default="main" basedir="../">
+	<description>
+            description
+    </description>
+
+	<loadproperties srcfile=".properties">
+	</loadproperties>
+	<taskdef resource="flexTasks.tasks"
+	         classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
+
+	<path id="apparat.path">
+		<fileset dir="${SCALA_HOME}" includes="lib/*.jar" />
+		<fileset dir="${APPARAT_HOME}" includes="**/*.jar" />
+	</path>
+
+	<taskdef resource="apparat/embedding/ant/antlib.xml">
+		<classpath refid="apparat.path" />
+	</taskdef>
+
+
+	<condition property="redshell" value="${redtamarin.osx.avmplus_d}">
+		<os family="mac" />
+	</condition>
+	<condition property="redshell" value="${redtamarin.win.avmplus_d}">
+		<os family="windows" />
+	</condition>
+
+	<!-- ================================= 
+          target: main              
+         ================================= -->
+	<target name="main" depends="init" description="description">
+
+	</target>
+
+	<!-- ================================= 
+          target: build reggen              
+         ================================= -->
+	<target name="build reggen" depends="init" description="description">
+		<java jar="${redtamarin.asc}" fork="true">
+			<arg line="-import ${redtamarin.libs.builtin}" />
+			<arg line="-import ${redtamarin.libs.toplevel}" />
+			<arg line="-d" />
+			<arg line="-strict" />
+			<arg line="${basedir}/reggen/src/reggen.as" />
+		</java>
+
+		<move file="${basedir}/reggen/src/reggen.abc"
+		      tofile="${basedir}/reggen/libs/reggen.abc" />
+	</target>
+
+	<!-- ================================= 
+          target: build maskgen
+         ================================= -->
+	<target name="build maskgen" depends="init" description="description">
+		<java jar="${redtamarin.asc}" fork="true">
+			<arg line="-import ${redtamarin.libs.builtin}" />
+			<arg line="-import ${redtamarin.libs.toplevel}" />
+			<arg line="-d" />
+			<arg line="-strict" />
+			<arg line="${basedir}/reggen/src/maskgen.as" />
+		</java>
+
+		<move file="${basedir}/reggen/src/maskgen.abc"
+		      tofile="${basedir}/reggen/libs/maskgen.abc" />
+	</target>
+
+	<!-- ================================= 
+          target: run reggen              
+         ================================= -->
+	<target name="run reggen" depends="init" description="description">
+		<exec dir="${basedir}" executable="${redshell}">
+			<arg line="${basedir}/reggen/libs/reggen.abc" />
+		</exec>
+	</target>
+
+	<!-- ================================= 
+          target: run maskgen
+         ================================= -->
+	<target name="run maskgen" depends="init" description="description">
+		<exec dir="${basedir}" executable="${redshell}">
+			<arg line="${basedir}/reggen/libs/maskgen.abc" />
+		</exec>
+	</target>
+
+	
+	<!-- ================================= 
+          target: tdsi test              
+         ================================= -->
+    <target name="tdsi test" depends="init" description="description">
+    	<stripper in="${basedir}/bin/MiscTests_inter.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+			<classpath refid="apparat.path" />
+    	</stripper>
+    	<tdsi inline="true" macro="true" in="${basedir}/bin/MiscTests_inter.swf" out="${basedir}/bin/MiscTests.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+			<classpath refid="apparat.path" />
+    	</tdsi>
+		<asmifier in="${basedir}/bin/MiscTests.swf" out="${basedir}/bin/MiscTests.asm" fork="true" >
+			<classpath refid="apparat.path" />
+		</asmifier >
+    </target>
+
+	<!-- ================================= 
+          target: tdsi bench              
+         ================================= -->
+    <target name="tdsi bench" depends="init" description="description">
+    	<stripper in="${basedir}/bin/MiniAssemblerBench_inter.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+			<classpath refid="apparat.path" />
+    	</stripper>
+    	<tdsi inline="true" macro="true" in="${basedir}/bin/MiniAssemblerBench_inter.swf" out="${basedir}/bin/MiniAssemblerBench.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+			<classpath refid="apparat.path" />
+    	</tdsi>
+    </target>
+
+	<!-- ================================= 
+          target: tdsi unit tests
+         ================================= -->
+    <target name="tdsi unit tests" depends="init" description="description">
+    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/tests.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+			<classpath refid="apparat.path" />
+    	</tdsi>
+    </target>
+
+	
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="init">
+	</target>
+
+</project>
