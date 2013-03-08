@@ -61,11 +61,6 @@ package com.instagal.tests {
 			_shader.seq( oc , c17 , v4   );
 			_shader.sne( t0 , c16 , v5   );
 		}
-		
-		
-		override protected function _run() : Boolean {
-			return super._run();
-		}
 
 	}
 }

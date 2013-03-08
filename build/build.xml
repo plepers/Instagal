@@ -111,10 +111,34 @@
           target: tdsi bench              
          ================================= -->
     <target name="tdsi bench" depends="init" description="description">
-    	<stripper in="${basedir}/bin/MiniAssemblerBench_inter.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+    	<stripper in="${basedir}/tests/bin/bench_inter.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
     	</stripper>
-    	<tdsi inline="true" macro="true" in="${basedir}/bin/MiniAssemblerBench_inter.swf" out="${basedir}/bin/MiniAssemblerBench.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/bench_inter.swf" out="${basedir}/tests/bin/bench.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+			<classpath refid="apparat.path" />
+    	</tdsi>
+    </target>
+
+	<!-- ================================= 
+          target: tdsi bench inst         
+         ================================= -->
+    <target name="tdsi bench inst" depends="init" description="description">
+    	<stripper in="${basedir}/tests/bin/bench_insta.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+			<classpath refid="apparat.path" />
+    	</stripper>
+    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/bench_insta.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+			<classpath refid="apparat.path" />
+    	</tdsi>
+    </target>
+
+	<!-- ================================= 
+          target: tdsi bench mini         
+         ================================= -->
+    <target name="tdsi bench mini" depends="init" description="description">
+    	<stripper in="${basedir}/tests/bin/bench_mini.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+			<classpath refid="apparat.path" />
+    	</stripper>
+    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/bench_mini.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
     	</tdsi>
     </target>

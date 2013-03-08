@@ -10,7 +10,7 @@ package com.instagal.tests {
 		protected var _error : String = "";
 		
 		public function BaseTest( ) {
-			_name = getQualifiedClassName(this );
+			_name = getQualifiedClassName( this ).split( "::" )[1];
 		}
 
 		public function run() : void {
@@ -25,9 +25,10 @@ package com.instagal.tests {
 
 		protected function displayResult( ok : Boolean ) : void {
 			if( ok )
-				UnitTests.console.htmlText += ( _name +"\n			OK" );
+				UnitTests.console.htmlText += ( "  ok			"+_name );
 			else
-				UnitTests.console.htmlText += ( "<textformat color='0xFF0000'>"+_name +"\n			KO : \n			"+_error+"</textformat>" );
+				UnitTests.console.htmlText += ( "KO  			"+_name+"\n"+_error );
+				//UnitTests.console.htmlText += ( "<textformat color='0xFF0000'>"+_name +"\n			KO : \n			"+_error+"</textformat>" );
 		}
 		
 	}

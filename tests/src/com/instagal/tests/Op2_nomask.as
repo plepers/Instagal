@@ -471,10 +471,6 @@ package com.instagal.tests {
 			_shader.sgn( t1 , c15  );
 		}
 		
-		
-		override protected function _run() : Boolean {
-			return super._run();
-		}
 
 	}
 }

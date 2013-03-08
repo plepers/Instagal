@@ -65,11 +65,6 @@ package com.instagal.tests {
 			_shader.kil( v0 ^ wwzw );
 			_shader.kil( v0 ^ wzyx );
 		}
-		
-		
-		override protected function _run() : Boolean {
-			return super._run();
-		}
 
 	}
 }

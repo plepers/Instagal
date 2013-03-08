@@ -8,7 +8,9 @@ package com.instagal {
 	 * com.lepers.agal.Agal
 	 */
 	public class Agal extends Macro {
-
+		
+		// ---- OP 2
+		
 		public static function mov(pos : uint, dest : uint, src : uint) : void {
 			Memory.writeInt(0x00, pos);
 			Agal._writeOp2(pos, dest, src);
@@ -108,7 +110,9 @@ package com.instagal {
 			Memory.writeInt(0x2b, pos);
 			Agal._writeOp2(pos, dest, src);
 		}
-
+		
+		// ---- OP 3
+				
 		public static function add(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
 			Memory.writeInt(0x01, pos);
 			Agal._writeOp3(pos, dest, src1, src2);
@@ -174,16 +178,6 @@ package com.instagal {
 			Agal._writeOp3(pos, dest, src1, src2);
 		}
 
-		public static function ted(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x26, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
-		}
-
-		public static function tex(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x28, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
-		}
-
 		public static function sge(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
 			Memory.writeInt(0x29, pos);
 			Agal._writeOp3(pos, dest, src1, src2);
@@ -203,11 +197,27 @@ package com.instagal {
 			Memory.writeInt(0x2d, pos);
 			Agal._writeOp3(pos, dest, src1, src2);
 		}
+		
+		// ---- SAMPLERS
+		
+		public static function ted(pos : uint, dest : uint, tcoord : uint, samp : uint) : void {
+			Memory.writeInt(0x26, pos);
+			Agal._writeSampler(pos, dest, tcoord, samp);
+		}
+
+		public static function tex(pos : uint, dest : uint, tcoord : uint, samp : uint) : void {
+			Memory.writeInt(0x28, pos);
+			Agal._writeSampler(pos, dest, tcoord, samp);
+		}
+
+		// ---- OP 1
 
 		public static function kil(pos : uint, dest : uint) : void {
 			Memory.writeInt(0x27, pos);
 			Agal._writeOp1(pos, dest);
 		}
+
+		// ---- OP 0
 
 		public static function els(pos : uint) : void {
 			Memory.writeInt(0x20, pos);
@@ -230,10 +240,10 @@ package com.instagal {
 			if ( ( src & 0x10000 ) == 0x10000 ) {
 				Memory.writeInt(0, pos += 4);// TODO implement indirect
 			} else {
-				Memory.writeInt( src & 0xFF00FFFF, pos += 4);
+				Memory.writeInt( src & 0xFF000FFF, pos += 4);
 			}
 
-			Memory.writeInt(( src >>> 20 ) & 0xF, pos += 4);
+			Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
 			
 			// null src 2
 			Memory.writeInt(0, pos += 4);
@@ -262,19 +272,31 @@ package com.instagal {
 					( 1 << ((dest >>> 30) & 3) ) 
 				  ) << 16 
 				) | 
-				(dest & 0xffff) |
-				((dest & 0x00f00000)<<4),
+				(dest & 0xfff) |
+				((dest & 0xF000) << 12 ),
 				pos += 4
 			);
 
 			// SRC
-			if ( ( src & 0x10000 ) == 0x10000 ) {
-				Memory.writeInt(0, pos += 4);// TODO implement indirect
+			if ( ( src & 0x10000 ) == 0x10000 ) { // indirect
+				Memory.writeInt( 
+					(src & 0xFF000000) |
+					( (src & 0x3F) <<16 ) |
+					( (src >>> 17 ) & 0x7F ) ,
+					pos += 4 
+				);
+				Memory.writeInt(
+					( src & 0xF00 ) |  // index type I
+					(( src >>> 12 ) & 0xF ) | // type T
+					(( src << 10 ) & 0x30000) | //index comp Q
+					0x80000000, 
+					pos += 4
+				);
 			} else {
-				Memory.writeInt( src & 0xFF00FFFF, pos += 4);
+				Memory.writeInt( src & 0xFF000FFF, pos += 4);
+				Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
 			}
 
-			Memory.writeInt(( src >>> 20 ) & 0xF, pos += 4);
 
 			// 0 (SRC2)
 			Memory.writeInt(0, pos += 4);
@@ -293,32 +315,103 @@ package com.instagal {
 					( 1 << ((dest >>> 30) & 3) ) 
 				  ) << 16 
 				) | 
-				(dest & 0xffff) |
-				((dest & 0x00f00000)<<4),
+				(dest & 0x0FFF) |
+				((dest & 0xF000) << 12 ),
 				pos += 4
 			);
 
-			// SRC
-			if ( ( src1 & 0x10000 ) == 0x10000 ) {
-				Memory.writeInt(0, pos += 4);// TODO implement indirect
+			// SRC 1
+			if ( ( src1 & 0x10000 ) == 0x10000 ) { // indirect
+				Memory.writeInt( 
+					(src1 & 0xFF000000) |
+					( (src1 & 0x3F) <<16 ) |
+					( (src1 >>> 17 ) & 0x7F ) ,
+					pos += 4 
+				);
+				Memory.writeInt(
+					( src1 & 0xF00 ) |  // index type I
+					(( src1 >>> 12 ) & 0xF ) | // type T
+					(( src1 << 10 ) & 0x30000) | //index comp Q
+					0x80000000, 
+					pos += 4
+				);
 			} else {
-				Memory.writeInt( src1 & 0xFF00FFFF, pos += 4);
+				Memory.writeInt( src1 & 0xFF000FFF, pos += 4);
+				Memory.writeInt(( src1 >>> 12 ) & 0xF, pos += 4);
 			}
-
-			Memory.writeInt(( src1 >>> 20 ) & 0xF, pos += 4);
+			
 			
 			
 			// SRC 2
-			if ( ( src2 & 0x10000 ) == 0x10000 ) {
-				Memory.writeInt(0, pos += 4);// TODO implement indirect
+			if ( ( src2 & 0x10000 ) == 0x10000 ) { // indirect
+				Memory.writeInt( 
+					(src2 & 0xFF000000) |
+					( (src2 & 0x3F) <<16 ) |
+					( (src2 >>> 17 ) & 0x7F ) ,
+					pos += 4 
+				);
+				Memory.writeInt(
+					( src2& 0xF00 ) |  // index type I
+					(( src2 >>> 12 ) & 0xF ) | // type T
+					(( src2 << 10 ) & 0x30000) | //index comp Q
+					0x80000000, 
+					pos += 4
+				);
 			} else {
-				Memory.writeInt( src2 & 0xFF00FFFF, pos += 4);
+				Memory.writeInt( src2 & 0xFF000FFF, pos += 4);
+				Memory.writeInt(( src2 >>> 12 ) & 0xF, pos += 4);
 			}
-
-			Memory.writeInt(( src2 >>> 20 ) & 0xF, pos += 4);
 
 
 			pos += 4;
 		}
+		
+		public static function _writeSampler(pos : uint, dest : uint, src : uint, samp : uint) : void {
+			
+			// DEST
+			Memory.writeInt(
+				( ( 
+					( 1 << ((dest >>> 24) & 3) ) | 
+					( 1 << ((dest >>> 26) & 3) ) | 
+					( 1 << ((dest >>> 28) & 3) ) | 
+					( 1 << ((dest >>> 30) & 3) ) 
+				  ) << 16 
+				) | 
+				(dest & 0x0FFF) |
+				((dest & 0xF000) << 12 ),
+				pos += 4
+			);
+
+			// SRC
+			if ( ( src & 0x10000 ) == 0x10000 ) { // indirect
+				Memory.writeInt( 
+					(src & 0xFF000000) |
+					( (src & 0x3F) <<16 ) |
+					( (src >>> 17 ) & 0x7F ) ,
+					pos += 4 
+				);
+				Memory.writeInt(
+					( src & 0xF00 ) |  // index type I
+					(( src >>> 12 ) & 0xF ) | // type T
+					(( src << 10 ) & 0x30000) | //index comp Q
+					0x80000000, 
+					pos += 4
+				);
+			} else {
+				Memory.writeInt( src & 0xFF000FFF, pos += 4);
+				Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
+			}
+			
+			// SAMPLER
+			Memory.writeInt( ( samp & 0xFF) , pos += 4);
+			Memory.writeInt( ( samp & 0xFFFFFF00) | 0x5, pos += 4);
+
+
+			pos += 4;
+		}
+		
+		public static function _indirection( reg : uint ) : void {
+		}
+		
 	}
 }

@@ -432,11 +432,6 @@ package com.instagal.tests {
 			_shader.els();
 			_shader.eif();
 		}
-		
-		
-		override protected function _run() : Boolean {
-			return super._run();
-		}
 
 	}
 }

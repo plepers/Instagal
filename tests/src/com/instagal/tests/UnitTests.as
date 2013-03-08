@@ -24,6 +24,11 @@ package com.instagal.tests {
 			new Op2_mask().run();
 			new Op3_mask().run();
 			new Swizzle().run();
+			new Samplers_noOpt().run();
+			new Samplers_opt().run();
+			new Indirect_op2_nomask().run();
+			new Indirect_op3_nomask().run();
+			new Indirect_mask().run();
 			
 			stage.addChild( _console );
 		}

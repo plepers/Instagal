@@ -433,10 +433,5 @@ package com.instagal.tests {
 			_shader.kil( c0 );
 		}
 		
-		
-		override protected function _run() : Boolean {
-			return super._run();
-		}
-
 	}
 }

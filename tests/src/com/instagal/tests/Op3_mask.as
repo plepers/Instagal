@@ -184,11 +184,6 @@ package com.instagal.tests {
 			_shader.sne(  t0 ^ zzxy ,  c16 ^ zzxy ,   v5 ^ zzxy  );
 
 		}
-		
-		
-		override protected function _run() : Boolean {
-			return super._run();
-		}
 
 	}
 }
