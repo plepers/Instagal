@@ -1,14 +1,6 @@
-package com.instagal.bench{
+package com.instagal.tests {
 
-	import apparat.memory.MemoryPool;
-	import com.instagal.Agal;
-	import com.instagal.Shader;
-	import flash.display.Sprite;
 	import flash.display3D.Context3DProgramType;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.net.FileReference;
-	import flash.utils.getTimer;
 	import regs.a0;
 	import regs.a1;
 	import regs.a2;
@@ -420,157 +412,88 @@ package com.instagal.bench{
 	import regs.zzzx;
 	import regs.zzzy;
 
-
-
 	/**
 	 * @author Pierre Lepers
-	 * MiscTests
+	 * com.lepers.agal.tests.Op3_nomask
 	 */
-	public class MiscTests extends Sprite {
-
-		public function MiscTests() {
-//			testXor();
-			
-			MemoryPool.initialize();
-			
-			stage.addEventListener( MouseEvent.CLICK, onClick );
-		}
-
-		private function onClick(event : MouseEvent) : void {
-			testMov();
-		}
-
-		private function testMov() : void {
-			
-			var shader : Shader = new Shader( Context3DProgramType.VERTEX );
-			
-			shader.mov( t0, 	a0 					);      
-			shader.mov( t2, 	a2                  );
-			shader.m44( t7, 	t0, 		c0		);
-			shader.mul( op, 	t7, 		c4      );
-			shader.mov( v0, 	a1                 	);
-			shader.m44( t1^xyz, t0, 		c5      );
-			shader.mov( t1^w, 	t0^w           		);
-			shader.m33( t3^xyz, t2^xyz, 	c9  	);
-			shader.mov( t3^w, 	t2^w	           	);
-			shader.mov( v1, 	t3					);
-			shader.sub( t2, 	c13, 		t1      );
-			shader.nrm( t4^xyz,	t2^xyz         		);
-			shader.dp3( t1^w, 	t3^xyz, 	t4^xyz 	);
-			shader.sub( v2^w, 	c13^w, 		t1^w    );
-			shader.add( t1^w, 	t1^w, 		t1^w    );
-			shader.mul( t1^xyz, t3^xyz, 	t1^w	);		
-			shader.sub( t1^xyz, t1^xyz, 	t4^xyz	);			
-			shader.nrm( v2^xyz, t1^xyz				);
-			
-			
-			var fr : FileReference = new FileReference();
-			fr.save( shader.release(), "compiledAgal.agal" );
-		}
-
+	public class Swizzle extends CompareTest {
 		
-		public function testXor() : void {
-			//                                 --------
-			var a : uint = 	parseInt( "011010010000000001101001", 2 );
-			var op : uint = parseInt( "000000001010110100000000", 2 );
-			
-			trace( "MiscTests - MiscTests -- a ", ( a ).toString( 2 ) );
-			trace( "MiscTests - MiscTests -- op ", ( op ).toString( 2 ) );
-			trace( "");
-			trace( "MiscTests - MiscTests -- OR ", ( a|op ).toString( 2 ) );
-			trace( "MiscTests - MiscTests --  - ", ( a+op ).toString( 2 ) );
-			trace( "MiscTests - MiscTests --  ^ ", ( a^op ).toString( 2 ) );
-			
-			//                         --------
-			a  = 	parseInt( "011010011110010001101001", 2 );
-			op =    parseInt( "000000001010110100000000", 2 );
-			
-			
-			var reg : uint;
-			var mask : uint;
-			var m : uint;
-			for (var i : int = 0; i < 40; i++) {
-				reg = (0xE4);
-				m = Math.random()*0xff;
-				mask = m ^ 0xE4;
-				
-				trace( "reg 0xe4 ", fmt8(( 0xE4 ).toString( 2 )) );
-				trace( "mask     ", fmt8(( mask ).toString( 2 )) );
-				trace( "find     ", fmt8(( reg^mask ).toString( 2 )) );
-				trace( "want m   ", fmt8(( m ).toString( 2 )) );
-				trace( "" );
-				if( ( reg^mask ) != m ) throw new Error( "MiscTests - MiscTests : " );
-			}
-			
-			
-			
-			stage.addEventListener( MouseEvent.CLICK, _testOpPref );
-		}
-
-		private function fmt8( str : String ) : String {
-			var zeros : String = "00000000";
-			return zeros.substr(0, 8-str.length)+str;
-		}
-
-
-		private function _testOpPref( e : Event ) : void {
-			
-			var a : uint = 	parseInt( "011010010000000001101001", 2 );
-			var op : uint = parseInt( "000000001010110100000000", 2 );
-			
-			var i : int = 0;
-			var l : int = 1000000;
-			
-			var st : int, et : int;
-			
-
-			st = getTimer();
-			for ( i=0; i<l; i++ ) {
-				a^op;
-			}
-			et = getTimer();
-			trace( "^ run in "+(et-st) + " ms " );
-
-			st = getTimer();
-			for ( i=0; i<l; i++ ) {
-				a^op;
-			}
-			et = getTimer();
-			trace( "^ run in "+(et-st) + " ms " );
-			
-			
-			st = getTimer();
-			for ( i=0; i<l; i++ ) {
-				a|op;
-			}
-			et = getTimer();
-			trace( "| run in "+(et-st) + " ms " );
-
-			st = getTimer();
-			for ( i=0; i<l; i++ ) {
-				a|op;
-			}
-			et = getTimer();
-			trace( "| run in "+(et-st) + " ms " );
-
-			
-			st = getTimer();
-			for ( i=0; i<l; i++ ) {
-				a^op;
-			}
-			et = getTimer();
-			trace( "^ run in "+(et-st) + " ms " );
-			
-			
-			st = getTimer();
-			for ( i=0; i<l; i++ ) {
-				a|op;
-			}
-			et = getTimer();
-			trace( "| run in "+(et-st) + " ms " );
-			
-		}
-
 		
+		public function Swizzle() {
+			super();
+			
+			_agalType = Context3DProgramType.FRAGMENT;
+			
+			_agalString = 	"mov ft0.yzzz 	,   v0.wzzz    \n";		
+			_agalString += 	"mov ft0.zyyy 	,   v0.zwww    \n";		
+			_agalString += 	"rcp ft1.xyzz 	,   v1.wyzz    \n";		
+			_agalString += 	"frc ft2.wzxx	,   v2.wzxx    \n";
+			_agalString += 	"rcp ft1.zyzz 	,   v1.zyzz    \n";		
+			_agalString += 	"frc ft2.xzxx	,   v2.xzxx    \n";
+			_agalString += 	"sqt ft3.x 		,   v3.x       \n";
+			_agalString += 	"rsq ft4.xx 	,   v4.xx      \n";
+			_agalString += 	"log ft5.xxx 	,   v5.xxx     \n";
+			_agalString += 	"exp ft6.xxxx   ,   v6.xxxx    \n";
+			_agalString += 	"nrm ft7.y      , fc27.y       \n";
+			_agalString += 	"sin  oc.yy     , fc26.yy      \n";
+			_agalString += 	"cos ft0.yyy    , fc25.yyy     \n";
+			_agalString += 	"abs ft1.yyyy   , fc24.yyyy    \n";
+			_agalString += 	"neg ft2.z      , fc23.z       \n";
+			_agalString += 	"sat ft3.zz     , fc22.zz      \n";
+			_agalString += 	"ddx ft4.zzz    , fc21.zzz     \n";
+			_agalString += 	"ddy ft5.zzzz   , fc20.zzzz    \n";
+			_agalString += 	"sgn ft1.w      , fc15.w       \n";
+			_agalString += 	"sgn ft1.ww     , fc15.ww      \n";
+			_agalString += 	"sgn ft1.www    , fc15.www     \n";
+			_agalString += 	"sgn ft1.wwww   , fc15.wwww    \n";
+			
+		}
+		
+		
+		
+		override protected function _compile() : void {
+			_shader.mov( t0 ^ yz   , v0  ^ wz     );
+			_shader.mov( t0 ^ zy   , v0  ^ zw     );
+			_shader.rcp( t1 ^ xyz  , v1  ^ wyz    );
+			_shader.frc( t2 ^ wzx  , v2  ^ wzx    );
+			_shader.rcp( t1 ^ zyz  , v1  ^ zyz    );
+			_shader.frc( t2 ^ xzx  , v2  ^ xzx    );
+			_shader.sqt( t3 ^ x    , v3  ^ x      );
+			_shader.rsq( t4 ^ x    , v4  ^ x      );
+			_shader.log( t5 ^ x    , v5  ^ x      );
+			_shader.exp( t6 ^ x    , v6  ^ x      );
+			_shader.nrm( t7 ^ y    , c27 ^ y      );
+			_shader.sin( oc ^ y    , c26 ^ y      );
+			_shader.cos( t0 ^ y    , c25 ^ y      );
+			_shader.abs( t1 ^ y    , c24 ^ y      );
+			_shader.neg( t2 ^ z    , c23 ^ z      );
+			_shader.sat( t3 ^ z    , c22 ^ z      );
+			_shader.ddx( t4 ^ z    , c21 ^ z      );
+			_shader.ddy( t5 ^ z    , c20 ^ z      );
+			_shader.sgn( t1 ^ w    , c15 ^ w      );
+			_shader.sgn( t1 ^ w    , c15 ^ w      );
+			_shader.sgn( t1 ^ w    , c15 ^ w      );
+			_shader.sgn( t1 ^ w    , c15 ^ w      );
+			
+			
+			
+		}
+		
+		
+		override protected function _run() : Boolean {
+			return super._run();
+		}
+
 	}
 }
+ /*
+0A000000 04000502 0400002A 04000000 00000000 00000000 
+0C000000 05000702 050000A4 04000000 00000000 00000000 
+0D000000 06000702 060000E4 04000000 00000000 00000000 
+
+
+0A000000 04000502 0400002A 04000000 00000000 00000000 
+0C000000 05000702 050000A4 04000000 00000000 00000000 
+0D000000 06000702 06000094 04000000 00000000 00000000
+ * 
+ */ 

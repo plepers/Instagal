@@ -99,7 +99,7 @@
     	<stripper in="${basedir}/bin/MiscTests_inter.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
     	</stripper>
-    	<tdsi inline="true" macro="true" in="${basedir}/bin/MiscTests_inter.swf" out="${basedir}/bin/MiscTests.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+    	<tdsi inline="true" macro="true" in="${basedir}/bin/MiscTests_inter.swf" out="${basedir}/bin/MiscTests.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}">
 			<classpath refid="apparat.path" />
     	</tdsi>
 		<asmifier in="${basedir}/bin/MiscTests.swf" out="${basedir}/bin/MiscTests.asm" fork="true" >
@@ -123,7 +123,7 @@
           target: tdsi unit tests
          ================================= -->
     <target name="tdsi unit tests" depends="init" description="description">
-    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/tests.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/tests.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}">
 			<classpath refid="apparat.path" />
     	</tdsi>
     </target>

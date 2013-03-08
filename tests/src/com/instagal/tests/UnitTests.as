@@ -20,6 +20,10 @@ package com.instagal.tests {
 			new Op1_nomask().run();
 			new Op2_nomask().run();
 			new Op3_nomask().run();
+			new Op1_mask().run();
+			new Op2_mask().run();
+			new Op3_mask().run();
+			new Swizzle().run();
 			
 			stage.addChild( _console );
 		}

@@ -16,7 +16,7 @@ package com.instagal.tests {
 			
 			while( ba1.bytesAvailable ) 
 				if( ba1.readUnsignedByte() != ba2.readUnsignedByte() ) {
-					trace( "com.lepers.agal.tests.Utils - compareBytes -- breakAt ", ba1.position-1 );
+					trace( "com.lepers.agal.tests.Utils - compareBytes -- breakAt ", ba1.position-1, Math.ceil( ( ba1.position-8 ) / 24 ) );
 					return false;
 				}
 			
