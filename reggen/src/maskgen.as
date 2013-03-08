@@ -37,10 +37,9 @@ for (var i : uint = 0; i <= 0xff; i++) {
 	} else 
 		maskStr = COMPONENTS[code0]+COMPONENTS[code1]+COMPONENTS[code2]+COMPONENTS[code3];
 	
-	trace( maskStr, i.AS3::toString( 16 ) , (( i^0xE4 )<<16).AS3::toString( 16 ));
 	
 	asStr = "package "+_package+"{\n";
-	asStr += "	public const "+maskStr+" 	: uint = 0x"+(( i^0xE4 )<<16).AS3::toString( 16 )+";\n";
+	asStr += "	public const "+maskStr+" 	: uint = 0x"+uint((( i^0xE4 )<<24)).AS3::toString( 16 )+";\n";
 	asStr += "}";
 	
 	FileSystem.write( outputDir+maskStr+".as", asStr );

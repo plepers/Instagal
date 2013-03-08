@@ -226,14 +226,14 @@ package com.instagal {
 			
 			
 			// SRC
-			if ( ( src >> 31) == 1 ) {
-				// indirect
-				Memory.writeInt(0, pos += 4);
+			// SRC
+			if ( ( src & 0x10000 ) == 0x10000 ) {
+				Memory.writeInt(0, pos += 4);// TODO implement indirect
 			} else {
-				Memory.writeInt(( src & 0xFF ) | ( ( src & 0x00ff0000 ) << 8 ), pos += 4);
+				Memory.writeInt( src & 0xFF00FFFF, pos += 4);
 			}
 
-			Memory.writeInt(( src >>> 24 ) & 0xF, pos += 4);
+			Memory.writeInt(( src >>> 20 ) & 0xF, pos += 4);
 			
 			// null src 2
 			Memory.writeInt(0, pos += 4);
@@ -254,18 +254,27 @@ package com.instagal {
 
 		public static function _writeOp2(pos : uint, dest : uint, src : uint) : void {
 			// DEST
-			Memory.writeInt(( ( ( 1 << ((dest >>> 16) & 3) ) | ( 1 << ((dest >>> 18) & 3) ) | ( 1 << ((dest >>> 20) & 3) ) | ( 1 << ((dest >>> 22) & 3) ) ) << 16 ) | (dest & 0x0f00ffff), pos += 4);
+			Memory.writeInt(
+				( ( 
+					( 1 << ((dest >>> 24) & 3) ) | 
+					( 1 << ((dest >>> 26) & 3) ) | 
+					( 1 << ((dest >>> 28) & 3) ) | 
+					( 1 << ((dest >>> 30) & 3) ) 
+				  ) << 16 
+				) | 
+				(dest & 0xffff) |
+				((dest & 0x00f00000)<<4),
+				pos += 4
+			);
 
 			// SRC
-			if ( ( src >> 31) == 1 ) {
-				// indirect
-				// TODO implement indirect
-				Memory.writeInt(0, pos += 4);
+			if ( ( src & 0x10000 ) == 0x10000 ) {
+				Memory.writeInt(0, pos += 4);// TODO implement indirect
 			} else {
-				Memory.writeInt(( src & 0xFF ) | ( ( src & 0x00ff0000 ) << 8 ), pos += 4);
+				Memory.writeInt( src & 0xFF00FFFF, pos += 4);
 			}
 
-			Memory.writeInt(( src >>> 24 ) & 0xF, pos += 4);
+			Memory.writeInt(( src >>> 20 ) & 0xF, pos += 4);
 
 			// 0 (SRC2)
 			Memory.writeInt(0, pos += 4);
@@ -276,27 +285,38 @@ package com.instagal {
 
 		public static function _writeOp3(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
 			// DEST
-			Memory.writeInt(( ( ( 1 << ((dest >>> 16) & 3) ) | ( 1 << ((dest >>> 18) & 3) ) | ( 1 << ((dest >>> 20) & 3) ) | ( 1 << ((dest >>> 22) & 3) ) ) << 16 ) | (dest & 0x0f00ffff), pos += 4);
+			Memory.writeInt(
+				( ( 
+					( 1 << ((dest >>> 24) & 3) ) | 
+					( 1 << ((dest >>> 26) & 3) ) | 
+					( 1 << ((dest >>> 28) & 3) ) | 
+					( 1 << ((dest >>> 30) & 3) ) 
+				  ) << 16 
+				) | 
+				(dest & 0xffff) |
+				((dest & 0x00f00000)<<4),
+				pos += 4
+			);
 
-			// SRC 1
-			if ( ( src1 >> 31) == 1 ) {
-				// indirect
-				Memory.writeInt(0, pos += 4);
+			// SRC
+			if ( ( src1 & 0x10000 ) == 0x10000 ) {
+				Memory.writeInt(0, pos += 4);// TODO implement indirect
 			} else {
-				Memory.writeInt(( src1 & 0xFF ) | ( ( src1 & 0x00ff0000 ) << 8 ), pos += 4);
+				Memory.writeInt( src1 & 0xFF00FFFF, pos += 4);
 			}
 
-			Memory.writeInt(( src1 >>> 24 ) & 0xF, pos += 4);
-
+			Memory.writeInt(( src1 >>> 20 ) & 0xF, pos += 4);
+			
+			
 			// SRC 2
-			if ( ( src2 >> 31) == 1 ) {
-				// indirect
-				Memory.writeInt(0, pos += 4);
+			if ( ( src2 & 0x10000 ) == 0x10000 ) {
+				Memory.writeInt(0, pos += 4);// TODO implement indirect
 			} else {
-				Memory.writeInt(( src2 & 0xFF ) | ( ( src2 & 0x00ff0000 ) << 8 ), pos += 4);
+				Memory.writeInt( src2 & 0xFF00FFFF, pos += 4);
 			}
 
-			Memory.writeInt(( src2 >>> 24 ) & 0xF, pos += 4);
+			Memory.writeInt(( src2 >>> 20 ) & 0xF, pos += 4);
+
 
 			pos += 4;
 		}
