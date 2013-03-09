@@ -29,6 +29,7 @@ package com.instagal.tests {
 			new Indirect_op2_nomask().run();
 			new Indirect_op3_nomask().run();
 			new Indirect_mask().run();
+			new Indirect_mask_off().run();
 			
 			stage.addChild( _console );
 		}

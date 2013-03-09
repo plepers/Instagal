@@ -13,7 +13,6 @@ package com.instagal {
 		
 		public static function mov(pos : uint, dest : uint, src : uint) : void {
 			Memory.writeInt(0x00, pos);
-//			Agal._forward( pos );
 			Agal._writeOp2(pos, dest, src);
 		}
 
