@@ -1,6 +1,6 @@
 package com.instagal {
-
 	import flash.system.ApplicationDomain;
+
 	import apparat.inline.__byRef;
 	import apparat.memory.Memory;
 	import apparat.memory.MemoryBlock;
@@ -9,326 +9,232 @@ package com.instagal {
 	import flash.display3D.Context3DProgramType;
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
+
 	/**
 	 * @author Pierre Lepers
 	 * com.lepers.agal.Shader
 	 */
 	public class Shader {
-		
-		
-		
 		private var _memoryBlock : MemoryBlock;
-		
 		private var _ptr : uint;
 
-		public function Shader( type : String, version : uint = 1 ) {
-			
+		public function Shader(type : String, version : uint = 1) {
 			_memoryBlock = Shader.getFreeBlock();
 			_ptr = _memoryBlock.position;
-			
-			Memory.writeByte( MAGIC, _ptr );
-			Memory.writeInt( version, ++_ptr );
-			Memory.writeByte( TYPEID, _ptr+=4 );
-			
-			if( type == Context3DProgramType.FRAGMENT )
-				Memory.writeByte( FRAGMENT_TYPE, ++_ptr );
-			else if( type == Context3DProgramType.VERTEX )
-				Memory.writeByte( VERTEX_TYPE, ++_ptr );
+
+			Memory.writeByte(MAGIC, _ptr);
+			Memory.writeInt(version, ++_ptr);
+			Memory.writeByte(TYPEID, _ptr += 4);
+
+			if ( type == Context3DProgramType.FRAGMENT )
+				Memory.writeByte(FRAGMENT_TYPE, ++_ptr);
+			else if ( type == Context3DProgramType.VERTEX )
+				Memory.writeByte(VERTEX_TYPE, ++_ptr);
 			else
 				throw new ArgumentError("com.lepers.agal.Shader::Shader() : invalid type [" + type + "]");
 			_ptr++;
 		}
 
 		public function mov(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.mov(ptr, dest, src);
-			_ptr = ptr;
+			Agal.mov(__byRef(this._ptr), dest, src);
 		}
 
 		public function rcp(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.rcp(ptr, dest, src);
-			_ptr = ptr;
+			Agal.rcp(__byRef(this._ptr), dest, src);
 		}
 
 		public function frc(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.frc(ptr, dest, src);
-			_ptr = ptr;
+			Agal.frc(__byRef(this._ptr), dest, src);
 		}
 
 		public function sqt(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.sqt(ptr, dest, src);
-			_ptr = ptr;
+			Agal.sqt(__byRef(this._ptr), dest, src);
 		}
 
 		public function rsq(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.rsq(ptr, dest, src);
-			_ptr = ptr;
+			Agal.rsq(__byRef(this._ptr), dest, src);
 		}
 
 		public function log(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.log(ptr, dest, src);
-			_ptr = ptr;
+			Agal.log(__byRef(this._ptr), dest, src);
 		}
 
 		public function exp(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.exp(ptr, dest, src);
-			_ptr = ptr;
+			Agal.exp(__byRef(this._ptr), dest, src);
 		}
 
 		public function nrm(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.nrm(ptr, dest, src);
-			_ptr = ptr;
+			Agal.nrm(__byRef(this._ptr), dest, src);
 		}
 
 		public function sin(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.sin(ptr, dest, src);
-			_ptr = ptr;
+			Agal.sin(__byRef(this._ptr), dest, src);
 		}
 
 		public function cos(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.cos(ptr, dest, src);
-			_ptr = ptr;
+			Agal.cos(__byRef(this._ptr), dest, src);
 		}
 
 		public function abs(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.abs(ptr, dest, src);
-			_ptr = ptr;
+			Agal.abs(__byRef(this._ptr), dest, src);
 		}
 
 		public function neg(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.neg(ptr, dest, src);
-			_ptr = ptr;
+			Agal.neg(__byRef(this._ptr), dest, src);
 		}
 
 		public function sat(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.sat(ptr, dest, src);
-			_ptr = ptr;
+			Agal.sat(__byRef(this._ptr), dest, src);
 		}
 
 		public function ddx(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.ddx(ptr, dest, src);
-			_ptr = ptr;
+			Agal.ddx(__byRef(this._ptr), dest, src);
 		}
 
 		public function ddy(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.ddy(ptr, dest, src);
-			_ptr = ptr;
+			Agal.ddy(__byRef(this._ptr), dest, src);
 		}
 
 		public function ife(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.ife(ptr, dest, src);
-			_ptr = ptr;
+			Agal.ife(__byRef(this._ptr), dest, src);
 		}
 
 		public function ine(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.ine(ptr, dest, src);
-			_ptr = ptr;
+			Agal.ine(__byRef(this._ptr), dest, src);
 		}
 
 		public function ifg(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.ifg(ptr, dest, src);
-			_ptr = ptr;
+			Agal.ifg(__byRef(this._ptr), dest, src);
 		}
 
 		public function ifl(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.ifl(ptr, dest, src);
-			_ptr = ptr;
+			Agal.ifl(__byRef(this._ptr), dest, src);
 		}
 
 		public function sgn(dest : uint, src : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.sgn(ptr, dest, src);
-			_ptr = ptr;
+			Agal.sgn(__byRef(this._ptr), dest, src);
 		}
 
 		public function add(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.add(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.add(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function sub(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.sub(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.sub(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function mul(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.mul(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.mul(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function div(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.div(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.div(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function min(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.min(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.min(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function max(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.max(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.max(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function pow(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.pow(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.pow(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function crs(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.crs(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.crs(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function dp3(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.dp3(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.dp3(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function dp4(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.dp4(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.dp4(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function m33(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.m33(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.m33(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function m44(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.m44(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.m44(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function m34(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.m34(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.m34(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function ted(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.ted(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.ted(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function tex(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.tex(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.tex(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function sge(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.sge(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.sge(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function slt(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.slt(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.slt(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function seq(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.seq(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.seq(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function sne(dest : uint, src1 : uint, src2 : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.sne(ptr, dest, src1, src2);
-			_ptr = ptr;
+			Agal.sne(__byRef(this._ptr), dest, src1, src2);
 		}
 
 		public function kil(dest : uint) : void {
-			var ptr : uint = _ptr;
-			Agal.kil(ptr, dest);
-			_ptr = ptr;
+			Agal.kil(__byRef(this._ptr), dest);
 		}
 
 		public function els() : void {
-			var ptr : uint = _ptr;
-			Agal.els(ptr);
-			_ptr = ptr;
+			Agal.els(__byRef(this._ptr));
 		}
 
 		public function eif() : void {
-			var ptr : uint = _ptr;
-			Agal.eif(ptr);
-			_ptr = ptr;
+			Agal.eif(__byRef(this._ptr));
 		}
 
 		public function release() : ByteArray {
 			var res : ByteArray = new ByteArray();
 			res.endian = Endian.LITTLE_ENDIAN;
-			res.writeBytes( ApplicationDomain.currentDomain.domainMemory, _memoryBlock.position, _ptr-_memoryBlock.position)
-			
-			Shader.releaseBlock( _memoryBlock );
+			res.writeBytes(ApplicationDomain.currentDomain.domainMemory, _memoryBlock.position, _ptr - _memoryBlock.position);
+
+			Shader.releaseBlock(_memoryBlock);
 			_memoryBlock = null;
 			_ptr = 0;
-			
+
 			return res;
 		}
-
 
 		public function get ptr() : uint {
 			return _ptr;
 		}
-		
-		
-		
-		//_____________________________________________________________________________
-		//																  MemoryPooling
-		
+
+		// _____________________________________________________________________________
+		// MemoryPooling
 		private static const _freeBlocks : Vector.<MemoryBlock> = new Vector.<MemoryBlock>();
 
 		private static function getFreeBlock() : MemoryBlock {
-			if( MemoryPool.buffer == null ) 
+			if ( MemoryPool.buffer == null )
 				MemoryPool.initialize();
-			
-			if( _freeBlocks.length > 0 ) 
+
+			if ( _freeBlocks.length > 0 )
 				return _freeBlocks.pop();
-			return MemoryPool.allocate( AGAL_TOKENS_ALLOC );
+			return MemoryPool.allocate(AGAL_TOKENS_ALLOC);
 		}
 
-		private static function releaseBlock( block : MemoryBlock ) : void {
-			_freeBlocks.push( block );
+		private static function releaseBlock(block : MemoryBlock) : void {
+			_freeBlocks.push(block);
 		}
-
-		
 	}
 }
 

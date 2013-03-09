@@ -12,227 +12,311 @@ package com.instagal {
 		// ---- OP 2
 		
 		public static function mov(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x00, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x00, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function rcp(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x05, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x05, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function frc(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x08, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x08, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function sqt(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x09, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x09, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function rsq(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x0a, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x0a, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function log(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x0c, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x0c, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function exp(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x0d, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x0d, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function nrm(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x0e, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x0e, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function sin(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x0f, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x0f, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function cos(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x10, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x10, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function abs(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x14, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x14, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function neg(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x15, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x15, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function sat(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x16, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x16, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function ddx(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x1a, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x1a, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function ddy(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x1b, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x1b, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function ife(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x1c, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x1c, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function ine(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x1d, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x1d, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function ifg(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x1e, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x1e, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function ifl(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x1f, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x1f, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 
 		public static function sgn(pos : uint, dest : uint, src : uint) : void {
-			Memory.writeInt(0x2b, pos);
-			Agal._writeOp2(pos, dest, src);
+			var p : uint = pos;
+			Memory.writeInt(0x2b, p);
+			Agal._writeOp2(p, dest, src);
+			pos = p;
 		}
 		
 		// ---- OP 3
 				
 		public static function add(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x01, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x01, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function sub(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x02, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x02, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function mul(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x03, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x03, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function div(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x04, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x04, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function min(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x06, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x06, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function max(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x07, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x07, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function pow(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x0b, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x0b, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function crs(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x11, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x11, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function dp3(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x12, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x12, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function dp4(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x13, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x13, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function m33(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x17, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x17, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function m44(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x18, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x18, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function m34(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x19, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x19, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function sge(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x29, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x29, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function slt(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x2a, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x2a, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function seq(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x2c, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x2c, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 
 		public static function sne(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
-			Memory.writeInt(0x2d, pos);
-			Agal._writeOp3(pos, dest, src1, src2);
+			var p : uint = pos;
+			Memory.writeInt(0x2d, p);
+			Agal._writeOp3(p, dest, src1, src2);
+			pos = p;
 		}
 		
 		// ---- OP TEX
 		
 		public static function ted(pos : uint, dest : uint, tcoord : uint, samp : uint) : void {
-			Memory.writeInt(0x26, pos);
-			Agal._writeOpTex(pos, dest, tcoord, samp);
+			var p : uint = pos;
+			Memory.writeInt(0x26, p);
+			Agal._writeOpTex(p, dest, tcoord, samp);
+			pos = p;
 		}
 
 		public static function tex(pos : uint, dest : uint, tcoord : uint, samp : uint) : void {
-			Memory.writeInt(0x28, pos);
-			Agal._writeOpTex(pos, dest, tcoord, samp);
+			var p : uint = pos;
+			Memory.writeInt(0x28, p);
+			Agal._writeOpTex(p, dest, tcoord, samp);
+			pos = p;
 		}
 
 		// ---- OP 1
 
 		public static function kil(pos : uint, dest : uint) : void {
-			Memory.writeInt(0x27, pos);
-			Agal._writeOp1(pos, dest);
+			var p : uint = pos;
+			Memory.writeInt(0x27, p);
+			Agal._writeOp1(p, dest);
+			pos = p;
 		}
 
 		// ---- OP 0
 
 		public static function els(pos : uint) : void {
-			Memory.writeInt(0x20, pos);
-			Agal._writeOp0(pos);
+			var p : uint = pos;
+			Memory.writeInt(0x20, p);
+			Agal._writeOp0(p);
+			pos = p;
 		}
 
 		public static function eif(pos : uint) : void {
-			Memory.writeInt(0x21, pos);
-			Agal._writeOp0(pos);
+			var p : uint = pos;
+			Memory.writeInt(0x21, p);
+			Agal._writeOp0(p);
+			pos = p;
 		}
 
 		public static function _writeOp1(pos : uint, src : uint) : void {
 			
 			// null dest
-			Memory.writeInt(0, pos += 4);
+			Agal._writeNullByte( pos );
 			
 			
 			// SRC 1
@@ -424,6 +508,19 @@ package com.instagal {
 		        GetLocal(pos),         
 		        PushByte(8),         
 		        Add,
+				Dup,         
+		        SetLocal(pos),   
+		        SetInt
+			);
+		}
+
+		public static function _writeNullByte ( pos : uint ) : void {
+			__asm(
+			//Memory.writeInt(0, pos += 4);
+				PushByte(0),         
+		        GetLocal(pos),         
+		        PushByte(4),         
+		        Add,        
 				Dup,         
 		        SetLocal(pos),   
 		        SetInt
