@@ -203,14 +203,30 @@ package com.instagal {
 			Agal.eif(__byRef(this._ptr));
 		}
 
-		public function release() : ByteArray {
+		public function dipose() : void {
+			if( null != _memoryBlock ) 
+				Shader.releaseBlock(_memoryBlock);
+			_memoryBlock = null;
+		}
+
+		public function writeBytes( res : ByteArray ) : void {
+			var len : int = _ptr - _memoryBlock.position;
+			res.position = 0;
+			res.length = len;
+			res.writeBytes(ApplicationDomain.currentDomain.domainMemory, _memoryBlock.position, len );
+
+			Shader.releaseBlock(_memoryBlock);
+			_memoryBlock = null;
+		}
+		
+		
+		public function complete() : ByteArray {
 			var res : ByteArray = new ByteArray();
 			res.endian = Endian.LITTLE_ENDIAN;
 			res.writeBytes(ApplicationDomain.currentDomain.domainMemory, _memoryBlock.position, _ptr - _memoryBlock.position);
 
 			Shader.releaseBlock(_memoryBlock);
 			_memoryBlock = null;
-			_ptr = 0;
 
 			return res;
 		}
@@ -219,9 +235,6 @@ package com.instagal {
 			return _ptr;
 		}
 
-		public function setPointer( ptr : uint ) : void {
-			_ptr = ptr;
-		}
 
 		// _____________________________________________________________________________
 		// MemoryPooling

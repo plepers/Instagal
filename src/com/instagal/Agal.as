@@ -319,7 +319,7 @@ package com.instagal {
 			Agal._writeNullDest( pos );
 			
 			// SRC 1
-			if ( ( src & 0x10000 ) == 0 )  // indirect
+			if ( ( src & 0x10000 ) == 0 )
 				Agal._writeSource1D( pos, src );
 			else 
 				Agal._writeSource1I( pos, src );
@@ -341,7 +341,7 @@ package com.instagal {
 			Agal._writeDest(pos, dest);
 
 			// SRC 1
-			if ( ( src & 0x10000 ) == 0 )  // indirect
+			if ( ( src & 0x10000 ) == 0 )
 				Agal._writeSource1D( pos, src );
 			else 
 				Agal._writeSource1I( pos, src );
@@ -358,13 +358,13 @@ package com.instagal {
 			Agal._writeDest(pos, dest);
 
 			// SRC 1
-			if ( ( src1 & 0x10000 ) == 0 )  // indirect
+			if ( ( src1 & 0x10000 ) == 0 )
 				Agal._writeSource1D( pos, src1 );
 			else 
 				Agal._writeSource1I( pos, src1 );
 			
 			// SRC 2
-			if ( ( src2 & 0x10000 ) == 0 )  // indirect
+			if ( ( src2 & 0x10000 ) == 0 )
 				Agal._writeSource2D( pos, src2 );
 			else 
 				Agal._writeSource2I( pos, src2 );
@@ -379,7 +379,7 @@ package com.instagal {
 
 
 			// SRC 1
-			if ( ( src & 0x10000 ) == 0 )  // indirect
+			if ( ( src & 0x10000 ) == 0 )
 				Agal._writeSource1D( pos, src );
 			else 
 				Agal._writeSource1I( pos, src );
@@ -395,166 +395,165 @@ package com.instagal {
 		
 		public static function _forward ( pos : uint ) : void {
 			__asm(
-				//pos += 4;
-					GetLocal( pos ),          
-			        PushByte(24),         
-			        Add,         
-			        SetLocal(pos)      
-				);
+			//pos += 24;
+				GetLocal( pos ),          
+				PushByte(24),         
+				Add,         
+				SetLocal(pos)      
+			);
 		}
 		
 		public static function _writeSource1D ( pos : uint, src : uint ) : void {
 			__asm(
 				//Memory.writeInt( src & 0xFF000FFF, pos += 4);
 				//Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
-					GetLocal( src ),          
-			        PushUInt(4278194175),  //0xFF000FFF       
-			        BitAnd,         
-			        GetLocal(pos),         
-			        PushByte(8),         
-			        Add,         
-			        SetInt,   
+				GetLocal( src ),          
+				PushUInt(4278194175),  //0xFF000FFF       
+				BitAnd,         
+				GetLocal(pos),         
+				PushByte(8),         
+				Add,         
+				SetInt,   
 				
-					GetLocal( src ),         
-			        PushByte(12),         
-        			ShiftRightUnsigned,
-					PushByte(15),         
-       				BitAnd,        
-			        GetLocal(pos),         
-			        PushByte(12),
-			        Add,         
-			        SetInt
-				);
+				GetLocal( src ),         
+				PushByte(12),         
+				ShiftRightUnsigned,
+				PushByte(15),         
+				BitAnd,        
+				GetLocal(pos),         
+				PushByte(12),
+				Add,         
+				SetInt
+			);
 		}
 
 		public static function _writeSource2D ( pos : uint, src : uint ) : void {
 			__asm(
-				//Memory.writeInt( src & 0xFF000FFF, pos += 4);
-				//Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
-					GetLocal( src ),          
-			        PushUInt(4278194175),  //0xFF000FFF       
-			        BitAnd,         
-			        GetLocal(pos),         
-			        PushByte(16),         
-			        Add,         
-			        SetInt,   
+			//Memory.writeInt( src & 0xFF000FFF, pos += 4);
+			//Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
+				GetLocal( src ),          
+				PushUInt(4278194175),  //0xFF000FFF       
+				BitAnd,         
+				GetLocal(pos),         
+				PushByte(16),         
+				Add,         
+				SetInt,   
 				
-					GetLocal( src ),         
-			        PushByte(12),         
-        			ShiftRightUnsigned,
-					PushByte(15),         
-       				BitAnd,        
-			        GetLocal(pos),         
-			        PushByte(20),
-			        Add,         
-			        SetInt
-				);
+				GetLocal( src ),         
+				PushByte(12),         
+				ShiftRightUnsigned,
+				PushByte(15),         
+				BitAnd,        
+				GetLocal(pos),         
+				PushByte(20),
+				Add,         
+				SetInt
+			);
 		}
 
 		public static function _writeSource1I ( pos : uint, src : uint ) : void {
 			__asm(
-				/*
-				Memory.writeInt( 
-					(src & 0xFF000000) |
-					( (src & 0x3F) <<16 ) |
-					( (src >>> 17 ) & 0x7F ) ,
-					pos += 4 
-				);
-				Memory.writeInt(
-					( src & 0xF00 ) |  // index type I
-					(( src >>> 12 ) & 0xF ) | // type T
-					(( src << 10 ) & 0x30000) | //index comp Q
-					0x80000000, 
-					pos += 4
-				);
-				 */
-					GetLocal(src),         
-			        PushUInt(4278190080),         
-			        BitAnd,         
-			        GetLocal(src),         
-			        PushByte(63),         
-			        BitAnd,         
-			        PushByte(16),         
-			        ShiftLeft,         
-			        BitOr,         
-			        GetLocal(src),         
-			        PushByte(17),         
-			        ShiftRightUnsigned,         
-			        PushByte(127),         
-			        BitAnd,         
-			        BitOr,         
-			        GetLocal(pos),         
-			        PushByte(8),         
-			        Add,        
-			        SetInt,         
-			        GetLocal(src),         
-			        PushShort(3840),         
-			        BitAnd,         
-			        GetLocal(src),         
-			        PushByte(12),         
-			        ShiftRightUnsigned,         
-			        PushByte(15),         
-			        BitAnd,         
-			        BitOr,         
-			        GetLocal(src),         
-			        PushByte(10),         
-			        ShiftLeft,         
-			        PushInt(196608),         
-			        BitAnd,         
-			        BitOr,         
-			        PushUInt(2147483648),         
-			        BitOr,         
-			        GetLocal(pos),         
-			        PushByte(12),         
-			        Add,         
-			        SetInt   
-				);
+			/*
+			Memory.writeInt( 
+				(src & 0xFF000000) |
+				( (src & 0x3F) <<16 ) |
+				( (src >>> 17 ) & 0x7F ) ,
+				pos += 4 
+			);
+			Memory.writeInt(
+				( src & 0xF00 ) |  // index type I
+				(( src >>> 12 ) & 0xF ) | // type T
+				(( src << 10 ) & 0x30000) | //index comp Q
+				0x80000000, 
+				pos += 4
+			);
+			 */
+				GetLocal(src),         
+				PushUInt(4278190080),         
+				BitAnd,         
+				GetLocal(src),         
+				PushByte(63),         
+				BitAnd,         
+				PushByte(16),         
+				ShiftLeft,         
+				BitOr,         
+				GetLocal(src),         
+				PushByte(17),         
+				ShiftRightUnsigned,         
+				PushByte(127),         
+				BitAnd,         
+				BitOr,         
+				GetLocal(pos),         
+				PushByte(8),         
+				Add,        
+				SetInt,         
+				GetLocal(src),         
+				PushShort(3840),         
+				BitAnd,         
+				GetLocal(src),         
+				PushByte(12),         
+				ShiftRightUnsigned,         
+				PushByte(15),         
+				BitAnd,         
+				BitOr,         
+				GetLocal(src),         
+				PushByte(10),         
+				ShiftLeft,         
+				PushInt(196608),         
+				BitAnd,         
+				BitOr,         
+				PushUInt(2147483648),         
+				BitOr,         
+				GetLocal(pos),         
+				PushByte(12),         
+				Add,         
+				SetInt   
+			);
 		}
 
 		public static function _writeSource2I ( pos : uint, src : uint ) : void {
 			__asm(
-			
-					GetLocal(src),         
-			        PushUInt(4278190080),         
-			        BitAnd,         
-			        GetLocal(src),         
-			        PushByte(63),         
-			        BitAnd,         
-			        PushByte(16),         
-			        ShiftLeft,         
-			        BitOr,         
-			        GetLocal(src),         
-			        PushByte(17),         
-			        ShiftRightUnsigned,         
-			        PushByte(127),         
-			        BitAnd,         
-			        BitOr,         
-			        GetLocal(pos),         
-			        PushByte(16),         
-			        Add,        
-			        SetInt,         
-			        GetLocal(src),         
-			        PushShort(3840),         
-			        BitAnd,         
-			        GetLocal(src),         
-			        PushByte(12),         
-			        ShiftRightUnsigned,         
-			        PushByte(15),         
-			        BitAnd,         
-			        BitOr,         
-			        GetLocal(src),         
-			        PushByte(10),         
-			        ShiftLeft,         
-			        PushInt(196608),         
-			        BitAnd,         
-			        BitOr,         
-			        PushUInt(2147483648),         
-			        BitOr,         
-			        GetLocal(pos),         
-			        PushByte(20),         
-			        Add,         
-			        SetInt   
-				);
+				GetLocal(src),         
+				PushUInt(4278190080),         
+				BitAnd,         
+				GetLocal(src),         
+				PushByte(63),         
+				BitAnd,         
+				PushByte(16),         
+				ShiftLeft,         
+				BitOr,         
+				GetLocal(src),         
+				PushByte(17),         
+				ShiftRightUnsigned,         
+				PushByte(127),         
+				BitAnd,         
+				BitOr,         
+				GetLocal(pos),         
+				PushByte(16),         
+				Add,        
+				SetInt,         
+				GetLocal(src),         
+				PushShort(3840),         
+				BitAnd,         
+				GetLocal(src),         
+				PushByte(12),         
+				ShiftRightUnsigned,         
+				PushByte(15),         
+				BitAnd,         
+				BitOr,         
+				GetLocal(src),         
+				PushByte(10),         
+				ShiftLeft,         
+				PushInt(196608),         
+				BitAnd,         
+				BitOr,         
+				PushUInt(2147483648),         
+				BitOr,         
+				GetLocal(pos),         
+				PushByte(20),         
+				Add,         
+				SetInt   
+			);
 		}
 
 		public static function _writeNullSrc1 ( pos : uint ) : void {
@@ -562,15 +561,15 @@ package com.instagal {
 			//Memory.writeInt(0, pos += 4);
 			//Memory.writeInt(0, pos += 4);
 				PushByte(0),         
-		        GetLocal(pos),     
-		        PushByte(8),         
-		        Add,
-		        SetInt,         
-		        PushByte(0),         
-		        GetLocal(pos),         
-		        PushByte(12),         
-		        Add,
-		        SetInt
+				GetLocal(pos),     
+				PushByte(8),         
+				Add,
+				SetInt,         
+				PushByte(0),         
+				GetLocal(pos),         
+				PushByte(12),         
+				Add,
+				SetInt
 			);
 		}
 
@@ -579,15 +578,15 @@ package com.instagal {
 			//Memory.writeInt(0, pos += 4);
 			//Memory.writeInt(0, pos += 4);
 				PushByte(0),         
-		        GetLocal(pos),     
-		        PushByte(16),         
-		        Add,
-		        SetInt,         
-		        PushByte(0),         
-		        GetLocal(pos),         
-		        PushByte(20),         
-		        Add,
-		        SetInt
+				GetLocal(pos),     
+				PushByte(16),         
+				Add,
+				SetInt,         
+				PushByte(0),         
+				GetLocal(pos),         
+				PushByte(20),         
+				Add,
+				SetInt
 			);
 		}
 
@@ -595,10 +594,10 @@ package com.instagal {
 			__asm(
 			//Memory.writeInt(0, pos += 4);
 				PushByte(0),         
-		        GetLocal(pos),         
-		        PushByte(4),         
-		        Add,        
-		        SetInt
+				GetLocal(pos),         
+				PushByte(4),         
+				Add,        
+				SetInt
 			);
 		}
 
@@ -610,30 +609,30 @@ package com.instagal {
 			//Memory.writeInt(0, pos += 4);
 			//Memory.writeInt(0, pos += 4);
 				PushByte(0),         
-		        GetLocal(pos),         
-		        PushByte(4),         
-		        Add,         
-		        SetInt,         
-		        PushByte(0),         
-		        GetLocal( pos ),         
-		        PushByte(8),         
-		        Add,         
-		        SetInt,         
-		        PushByte(0),         
-		        GetLocal( pos ),         
-		        PushByte(12),         
-		        Add,         
-		        SetInt,         
-		        PushByte(0),         
-		        GetLocal( pos ),         
-		        PushByte(16),         
-		        Add,         
-		        SetInt,         
-		        PushByte(0),         
-		        GetLocal( pos ),         
-		        PushByte(20),         
-		        Add,         
-		        SetInt
+				GetLocal(pos),         
+				PushByte(4),         
+				Add,         
+				SetInt,         
+				PushByte(0),         
+				GetLocal( pos ),         
+				PushByte(8),         
+				Add,         
+				SetInt,         
+				PushByte(0),         
+				GetLocal( pos ),         
+				PushByte(12),         
+				Add,         
+				SetInt,         
+				PushByte(0),         
+				GetLocal( pos ),         
+				PushByte(16),         
+				Add,         
+				SetInt,         
+				PushByte(0),         
+				GetLocal( pos ),         
+				PushByte(20),         
+				Add,         
+				SetInt
 			);
 		}
 
@@ -642,21 +641,21 @@ package com.instagal {
 			//Memory.writeInt( ( samp & 0xFF) , pos += 4);
 			//Memory.writeInt( ( samp & 0xFFFFFF00) | 0x5, pos += 4);
 				GetLocal(samp),         
-		        PushShort(255),         
-		        BitAnd,         
-		        GetLocal(pos),    
-		        PushByte(16),         
-		        Add,         
-		        SetInt,         
-		        GetLocal(samp),         
-		        PushUInt(4294967040),         
-		        BitAnd,         
-		        PushByte(5),         
-		        BitOr,         
-		        GetLocal(pos),         
-		        PushByte(20),         
-		        Add,         
-		        SetInt       
+				PushShort(255),         
+				BitAnd,         
+				GetLocal(pos),    
+				PushByte(16),         
+				Add,         
+				SetInt,         
+				GetLocal(samp),         
+				PushUInt(4294967040),         
+				BitAnd,         
+				PushByte(5),         
+				BitOr,         
+				GetLocal(pos),         
+				PushByte(20),         
+				Add,         
+				SetInt       
 			);
 		}
 
@@ -668,60 +667,58 @@ package com.instagal {
 					( 1 << ((dest >>> 24) & 3) ) | 
 					( 1 << ((dest >>> 26) & 3) ) | 
 					( 1 << ((dest >>> 28) & 3) ) | 
-					( 1 << ((dest >>> 30) & 3) ) 
+					( 1 << (dest >>> 30) ) 
 				  ) << 16 
 				) | 
 				(dest & 0x0FFF) |
 				((dest & 0xF000) << 12 ),
 				pos += 4
 			);*/
-		        PushByte(1),         
-		        GetLocal(dest),         
-		        PushByte(24),         
-		        ShiftRightUnsigned,         
-		        PushByte(3),         
-		        BitAnd,         
-		        ShiftLeft,         
-		        PushByte(1),         
-		        GetLocal(dest),         
-		        PushByte(26),         
-		        ShiftRightUnsigned,         
-		        PushByte(3),         
-		        BitAnd,         
-		        ShiftLeft,         
-		        BitOr,         
-		        PushByte(1),         
-		        GetLocal(dest),         
-		        PushByte(28),         
-		        ShiftRightUnsigned,         
-		        PushByte(3),         
-		        BitAnd,         
-		        ShiftLeft,         
-		        BitOr,         
-		        PushByte(1),         
-		        GetLocal(dest),         
-		        PushByte(30),         
-		        ShiftRightUnsigned,         
-		        PushByte(3),         
-		        BitAnd,         
-		        ShiftLeft,         
-		        BitOr,         
-		        PushByte(16),         
-		        ShiftLeft,         
-		        GetLocal(dest),         
-		        PushShort(4095),         
-		        BitAnd,         
-		        BitOr,         
-		        GetLocal(dest),         
-		        PushInt(61440),         
-		        BitAnd,         
-		        PushByte(12),         
-		        ShiftLeft,         
-		        BitOr,         
-		        GetLocal(pos),         
-		        PushByte(4),         
-		        Add,         
-		        SetInt
+				PushByte(1),         
+				GetLocal(dest),         
+				PushByte(24),         
+				ShiftRightUnsigned,         
+				PushByte(3),         
+				BitAnd,         
+				ShiftLeft,         
+				PushByte(1),         
+				GetLocal(dest),         
+				PushByte(26),         
+				ShiftRightUnsigned,         
+				PushByte(3),         
+				BitAnd,         
+				ShiftLeft,         
+				BitOr,         
+				PushByte(1),         
+				GetLocal(dest),         
+				PushByte(28),         
+				ShiftRightUnsigned,         
+				PushByte(3),         
+				BitAnd,         
+				ShiftLeft,         
+				BitOr,         
+				PushByte(1),         
+				GetLocal(dest),         
+				PushByte(30),         
+				ShiftRightUnsigned,         
+				ShiftLeft,         
+				BitOr,         
+				PushByte(16),         
+				ShiftLeft,         
+				GetLocal(dest),         
+				PushShort(4095),         
+				BitAnd,         
+				BitOr,         
+				GetLocal(dest),         
+				PushInt(61440),         
+				BitAnd,         
+				PushByte(12),         
+				ShiftLeft,         
+				BitOr,         
+				GetLocal(pos),         
+				PushByte(4),         
+				Add,         
+				SetInt
 			);
 		}
 		

@@ -117,18 +117,27 @@
     </target>
 
 	<!-- ================================= 
-          target: tdsi bench inst         
+          target: tdsi bench inst wb       
          ================================= -->
-    <target name="tdsi bench inst" depends="init" description="description">
-    	<stripper in="${basedir}/tests/bin/bench_insta.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+    <target name="tdsi bench inst wb" depends="init" description="description">
+    	<stripper in="${basedir}/tests/bin/bench_insta_wb.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
     	</stripper>
-    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/bench_insta.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/bench_insta_wb.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
     	</tdsi>
-		<asmifier in="${basedir}/tests/bin/bench_insta.swf" out="${basedir}/tests/asm" fork="true" >
+    </target>
+
+	<!-- ================================= 
+          target: tdsi bench inst cp       
+         ================================= -->
+    <target name="tdsi bench inst cp" depends="init" description="description">
+    	<stripper in="${basedir}/tests/bin/bench_insta_cp.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
-		</asmifier >
+    	</stripper>
+    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/bench_insta_cp.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+			<classpath refid="apparat.path" />
+    	</tdsi>
     </target>
 
 	<!-- ================================= 
@@ -150,6 +159,9 @@
     	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/tests.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}">
 			<classpath refid="apparat.path" />
     	</tdsi>
+		<asmifier in="${basedir}/tests/bin/tests.swf" out="${basedir}/tests/asm" fork="true" >
+			<classpath refid="apparat.path" />
+		</asmifier >
     </target>
 
 	
