@@ -338,7 +338,7 @@ const TYPEID : uint = 0xA1;
 const VERTEX_TYPE : uint = 0;
 const FRAGMENT_TYPE : uint = 1;
 
-const AGAL_MAX_TOKENS : uint = 200;
+const AGAL_MAX_TOKENS : uint = 1024;
 const AGAL_TOKENS_LEN : uint = 192;
 
 const AGAL_TOKENS_ALLOC : uint = AGAL_TOKENS_LEN * AGAL_MAX_TOKENS;
