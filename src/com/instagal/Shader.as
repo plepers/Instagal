@@ -219,6 +219,10 @@ package com.instagal {
 			return _ptr;
 		}
 
+		public function setPointer( ptr : uint ) : void {
+			_ptr = ptr;
+		}
+
 		// _____________________________________________________________________________
 		// MemoryPooling
 		private static const _freeBlocks : Vector.<MemoryBlock> = new Vector.<MemoryBlock>();

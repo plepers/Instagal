@@ -315,26 +315,24 @@ package com.instagal {
 
 		public static function _writeOp1(pos : uint, src : uint) : void {
 			
-			// null dest
-			Agal._writeNullByte( pos );
-			
+			// DEST (nil)
+			Agal._writeNullDest( pos );
 			
 			// SRC 1
 			if ( ( src & 0x10000 ) == 0x10000 )  // indirect
-				Agal._writeSourceI( pos, src );
+				Agal._writeSource1I( pos, src );
 			else 
-				Agal._writeSourceD( pos, src );
+				Agal._writeSource1D( pos, src );
 
 			// SRC 2 (nil)
-			Agal._writeNullShort( pos );
-
-			pos += 4;
+			Agal._writeNullSrc2( pos );
+			
+			Agal._forward(pos);
 		}
 
 		public static function _writeOp0(pos : uint) : void {
 			Agal._writeNullToken(pos);
-
-			pos += 4;
+			Agal._forward(pos);
 		}
 
 		public static function _writeOp2(pos : uint, dest : uint, src : uint) : void {
@@ -344,14 +342,14 @@ package com.instagal {
 
 			// SRC 1
 			if ( ( src & 0x10000 ) == 0x10000 )  // indirect
-				Agal._writeSourceI( pos, src );
+				Agal._writeSource1I( pos, src );
 			else 
-				Agal._writeSourceD( pos, src );
+				Agal._writeSource1D( pos, src );
 
 			// SRC 2 (nil)
-			Agal._writeNullShort( pos );
-
-			pos += 4;
+			Agal._writeNullSrc2( pos );
+			
+			Agal._forward(pos);
 		}
 
 		public static function _writeOp3(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
@@ -361,21 +359,17 @@ package com.instagal {
 
 			// SRC 1
 			if ( ( src1 & 0x10000 ) == 0x10000 )  // indirect
-				Agal._writeSourceI( pos, src1 );
+				Agal._writeSource1I( pos, src1 );
 			else 
-				Agal._writeSourceD( pos, src1 );
-			
-			
+				Agal._writeSource1D( pos, src1 );
 			
 			// SRC 2
 			if ( ( src2 & 0x10000 ) == 0x10000 )  // indirect
-				Agal._writeSourceI( pos, src2 );
+				Agal._writeSource2I( pos, src2 );
 			else 
-				Agal._writeSourceD( pos, src2 );
+				Agal._writeSource2D( pos, src2 );
 			
-
-
-			pos += 4;
+			Agal._forward(pos);
 		}
 		
 		public static function _writeOpTex(pos : uint, dest : uint, src : uint, samp : uint) : void {
@@ -386,28 +380,30 @@ package com.instagal {
 
 			// SRC 1
 			if ( ( src & 0x10000 ) == 0x10000 )  // indirect
-				Agal._writeSourceI( pos, src );
+				Agal._writeSource1I( pos, src );
 			else 
-				Agal._writeSourceD( pos, src );
+				Agal._writeSource1D( pos, src );
 
 			
 			// SAMPLER
 			Agal._writeSampler( pos, samp );
-
-			pos += 4;
+			
+			Agal._forward(pos);
 		}
+		
+		
 		
 		public static function _forward ( pos : uint ) : void {
 			__asm(
 				//pos += 4;
 					GetLocal( pos ),          
-			        PushByte(4),         
+			        PushByte(24),         
 			        Add,         
 			        SetLocal(pos)      
 				);
 		}
 		
-		public static function _writeSourceD ( pos : uint, src : uint ) : void {
+		public static function _writeSource1D ( pos : uint, src : uint ) : void {
 			__asm(
 				//Memory.writeInt( src & 0xFF000FFF, pos += 4);
 				//Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
@@ -415,7 +411,7 @@ package com.instagal {
 			        PushUInt(4278194175),  //0xFF000FFF       
 			        BitAnd,         
 			        GetLocal(pos),         
-			        PushByte(4),         
+			        PushByte(8),         
 			        Add,         
 			        SetInt,   
 				
@@ -425,15 +421,37 @@ package com.instagal {
 					PushByte(15),         
        				BitAnd,        
 			        GetLocal(pos),         
-			        PushByte(8),         
+			        PushByte(12),
 			        Add,         
-			        Dup,         
-			        SetLocal(pos),         
-			        SetInt    
+			        SetInt
 				);
 		}
 
-		public static function _writeSourceI ( pos : uint, src : uint ) : void {
+		public static function _writeSource2D ( pos : uint, src : uint ) : void {
+			__asm(
+				//Memory.writeInt( src & 0xFF000FFF, pos += 4);
+				//Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
+					GetLocal( src ),          
+			        PushUInt(4278194175),  //0xFF000FFF       
+			        BitAnd,         
+			        GetLocal(pos),         
+			        PushByte(16),         
+			        Add,         
+			        SetInt,   
+				
+					GetLocal( src ),         
+			        PushByte(12),         
+        			ShiftRightUnsigned,
+					PushByte(15),         
+       				BitAnd,        
+			        GetLocal(pos),         
+			        PushByte(20),
+			        Add,         
+			        SetInt
+				);
+		}
+
+		public static function _writeSource1I ( pos : uint, src : uint ) : void {
 			__asm(
 				/*
 				Memory.writeInt( 
@@ -466,8 +484,8 @@ package com.instagal {
 			        BitAnd,         
 			        BitOr,         
 			        GetLocal(pos),         
-			        PushByte(4),         
-			        Add,         
+			        PushByte(8),         
+			        Add,        
 			        SetInt,         
 			        GetLocal(src),         
 			        PushShort(3840),         
@@ -487,42 +505,99 @@ package com.instagal {
 			        PushUInt(2147483648),         
 			        BitOr,         
 			        GetLocal(pos),         
-			        PushByte(8),         
+			        PushByte(12),         
 			        Add,         
-			        Dup,         
-			        SetLocal(pos),         
-			        SetInt        
+			        SetInt   
 				);
 		}
 
-		public static function _writeNullShort ( pos : uint ) : void {
+		public static function _writeSource2I ( pos : uint, src : uint ) : void {
+			__asm(
+			
+					GetLocal(src),         
+			        PushUInt(4278190080),         
+			        BitAnd,         
+			        GetLocal(src),         
+			        PushByte(63),         
+			        BitAnd,         
+			        PushByte(16),         
+			        ShiftLeft,         
+			        BitOr,         
+			        GetLocal(src),         
+			        PushByte(17),         
+			        ShiftRightUnsigned,         
+			        PushByte(127),         
+			        BitAnd,         
+			        BitOr,         
+			        GetLocal(pos),         
+			        PushByte(16),         
+			        Add,        
+			        SetInt,         
+			        GetLocal(src),         
+			        PushShort(3840),         
+			        BitAnd,         
+			        GetLocal(src),         
+			        PushByte(12),         
+			        ShiftRightUnsigned,         
+			        PushByte(15),         
+			        BitAnd,         
+			        BitOr,         
+			        GetLocal(src),         
+			        PushByte(10),         
+			        ShiftLeft,         
+			        PushInt(196608),         
+			        BitAnd,         
+			        BitOr,         
+			        PushUInt(2147483648),         
+			        BitOr,         
+			        GetLocal(pos),         
+			        PushByte(20),         
+			        Add,         
+			        SetInt   
+				);
+		}
+
+		public static function _writeNullSrc1 ( pos : uint ) : void {
 			__asm(
 			//Memory.writeInt(0, pos += 4);
 			//Memory.writeInt(0, pos += 4);
 				PushByte(0),         
-		        GetLocal(pos),         
-		        PushByte(4),         
-		        Add,        
+		        GetLocal(pos),     
+		        PushByte(8),         
+		        Add,
 		        SetInt,         
 		        PushByte(0),         
 		        GetLocal(pos),         
-		        PushByte(8),         
+		        PushByte(12),         
 		        Add,
-				Dup,         
-		        SetLocal(pos),   
 		        SetInt
 			);
 		}
 
-		public static function _writeNullByte ( pos : uint ) : void {
+		public static function _writeNullSrc2 ( pos : uint ) : void {
+			__asm(
+			//Memory.writeInt(0, pos += 4);
+			//Memory.writeInt(0, pos += 4);
+				PushByte(0),         
+		        GetLocal(pos),     
+		        PushByte(16),         
+		        Add,
+		        SetInt,         
+		        PushByte(0),         
+		        GetLocal(pos),         
+		        PushByte(20),         
+		        Add,
+		        SetInt
+			);
+		}
+
+		public static function _writeNullDest ( pos : uint ) : void {
 			__asm(
 			//Memory.writeInt(0, pos += 4);
 				PushByte(0),         
 		        GetLocal(pos),         
 		        PushByte(4),         
 		        Add,        
-				Dup,         
-		        SetLocal(pos),   
 		        SetInt
 			);
 		}
@@ -558,8 +633,6 @@ package com.instagal {
 		        GetLocal( pos ),         
 		        PushByte(20),         
 		        Add,         
-		        Dup,         
-		        SetLocal( pos ),         
 		        SetInt
 			);
 		}
@@ -571,8 +644,8 @@ package com.instagal {
 				GetLocal(samp),         
 		        PushShort(255),         
 		        BitAnd,         
-		        GetLocal(pos),         
-		        PushByte(4),         
+		        GetLocal(pos),    
+		        PushByte(16),         
 		        Add,         
 		        SetInt,         
 		        GetLocal(samp),         
@@ -581,11 +654,9 @@ package com.instagal {
 		        PushByte(5),         
 		        BitOr,         
 		        GetLocal(pos),         
-		        PushByte(8),         
+		        PushByte(20),         
 		        Add,         
-		        Dup,         
-		        SetLocal(pos),         
-		        SetInt
+		        SetInt       
 			);
 		}
 
@@ -650,8 +721,6 @@ package com.instagal {
 		        GetLocal(pos),         
 		        PushByte(4),         
 		        Add,         
-		        Dup,         
-		        SetLocal(pos),         
 		        SetInt
 			);
 		}

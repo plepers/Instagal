@@ -96,6 +96,8 @@ package com.instagal.tests {
 			_agalString += 	"slt ft7.zyz  , fc18.zyz  ,   v3.zyz    \n";
 			_agalString += 	"seq  oc.zzw  , fc17.zzw  ,   v4.zzw    \n";
 			_agalString += 	"sne ft0.zzxy , fc16.zzxy ,   v5.zzxy   \n";
+			_agalString += 	"div ft1.w     ,  ft1.w   , fc0.z \n";
+			_agalString += 	"sub ft1.w     ,  ft1.w   , fc3.y \n";
 
 		}
 
@@ -182,8 +184,9 @@ package com.instagal.tests {
 			_shader.slt(  t7 ^ zyz  ,  c18 ^ zyz  ,   v3 ^ zyz   );
 			_shader.seq(  oc ^ zzw  ,  c17 ^ zzw  ,   v4 ^ zzw   );
 			_shader.sne(  t0 ^ zzxy ,  c16 ^ zzxy ,   v5 ^ zzxy  );
+			_shader.div( t1^w   , t1^w     ,c0^z	                      );
+			_shader.sub( t1^w   , t1^w     ,c3^y	                      );
 
 		}
-
 	}
 }

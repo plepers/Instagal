@@ -4,10 +4,9 @@ package com.instagal.bench {
 	import com.adobe.utils.AGALMiniAssembler;
 	import com.instagal.Shader;
 	import com.instagal.Tex;
+	import com.instagal.tests.Utils;
 
-	import flash.display.Sprite;
 	import flash.display3D.Context3DProgramType;
-	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.ByteArray;
@@ -17,9 +16,9 @@ package com.instagal.bench {
 	/**
 	 * @author plepers
 	 */
-	public class BenchCompiler extends Sprite {
+	public class BenchCompiler {
 		
-		private var tf : TextField;
+		internal var tf : TextField;
 		
 		private var _score : int = 0;
 		private var _compileNum : int = 0;
@@ -28,11 +27,9 @@ package com.instagal.bench {
 		private var looptime : int = 1000;
 		
 		public function BenchCompiler() {
-			stage.addEventListener( MouseEvent.CLICK, onClick );
 
 			tf = new TextField();
 			tf.autoSize = TextFieldAutoSize.LEFT;
-			addChild( tf );
 			
 			staticInit();
 			
@@ -43,13 +40,19 @@ CONFIG::insta {
 			tf.appendText( "Bench Instagal Assembler (click to run) \n" );
 }
 		}
-		private function onClick(event : MouseEvent) : void {
+		public function run() : void {
 
 			_compileNum = 0;
 			_score = 0;
 			
-			_runFragmentLoop();
-			_runVertexLoop();
+CONFIG::mini {	
+			_runFragmentLoopMini();
+			_runVertexLoopMini();
+}
+CONFIG::insta { 		
+			_runFragmentLoopInsta();
+			_runVertexLoopInsta();
+}
 			
 			tf.appendText( " "+ _compileNum + " compilations in "+ _score + " ms \n" );
 		}
@@ -59,15 +62,25 @@ CONFIG::insta {
 			// run some loop to don't take in account static initialization time
 			var ol : int = looptime;
 			looptime = 1;
-			_runFragmentLoop();
-			_runVertexLoop();
+			
+			var comp : Boolean;
+			
+			comp = Utils.compareBytes( _runFragmentLoopMini(), _runFragmentLoopInsta() );
+			if( ! comp ) {
+				tf.appendText( "Oups, broken fragment shader\n" );
+				Utils.logBytes(_runFragmentLoopMini(), 7 );
+				Utils.logBytes(_runFragmentLoopInsta(), 7 );
+			}
+			comp = Utils.compareBytes( _runVertexLoopMini(), _runVertexLoopInsta() );
+			if( ! comp ) 
+				tf.appendText( "Oups, broken vertex shader\n" );
+			
 			looptime = ol;
 		}
 		
 		
-CONFIG::mini {		
 		
-		private function _runVertexLoop() : void {
+		private function _runVertexLoopMini() : ByteArray {
 			
 			_compileNum += looptime;
 			
@@ -90,12 +103,12 @@ CONFIG::mini {
 			
 			
 			_score += time;
+			
+			return vba;
 		}
-}
 
-CONFIG::insta {	
 
-		private function _runVertexLoop() : void {
+		private function _runVertexLoopInsta() : ByteArray {
 			
 			_compileNum += looptime;
 			
@@ -143,12 +156,14 @@ CONFIG::insta {
 			//tf.appendText( "insta : compile "+ ( slow/fast ).toFixed(2) + " times faster \n" );
 			
 			_score += time;
+			
+			
+			return vba;
 		}
-}
 
-CONFIG::mini {	
 
-		private function _runFragmentLoop() : void {
+
+		private function _runFragmentLoopMini() : ByteArray {
 			
 			_compileNum += looptime;
 			
@@ -162,7 +177,7 @@ CONFIG::mini {
 			st = getTimer();
 			
 			for ( i = 0; i < looptime; i++) {
-				vba = new AGALMiniAssembler().assemble( Context3DProgramType.FRAGMENT, F_AGAL );
+				vba = new AGALMiniAssembler().assemble( Context3DProgramType.FRAGMENT, F_AGAL, 2 );
 			}
 			
 			et = getTimer();
@@ -172,11 +187,10 @@ CONFIG::mini {
 		
 			_score += time;
 			
+			return vba;
 		}
-}
 		
-CONFIG::insta {			
-		private function _runFragmentLoop() : void {
+		private function _runFragmentLoopInsta() : ByteArray {
 			
 			_compileNum += looptime;
 			
@@ -191,7 +205,7 @@ CONFIG::insta {
 			st = getTimer();
 			
 			for ( i = 0; i < looptime; i++) {
-				shader = new Shader( Context3DProgramType.FRAGMENT );
+				shader = new Shader( Context3DProgramType.FRAGMENT, 2 );
 				shader.mov( t0 	   , c2        );      
 				shader.tex( t1 	   , v1       ,s0 | Tex.CUBE | Tex.NEAREST | Tex.CLAMP    );
 				shader.div( t1^w   , t1^w     ,c0^z	                      );
@@ -224,8 +238,9 @@ CONFIG::insta {
 			time = (et-st);
 			
 			_score += time;
+			
+			return vba;
 		}
-}
 		
 	}
 
@@ -259,14 +274,14 @@ const V_AGAL : String =  [
 
 const F_AGAL : String =  [
 	"mov ft0 	   ,  fc2",
-	"tex ft1 	   ,  v1      , fs0 &lt;cube,nearest,clamp&gt;",
+	"tex ft1 	   ,  v1      , fs0 <cube,nearest,clamp>",
 	"div ft1.w     ,  ft1.w   , fc0.z",
 	"sub ft1.w     ,  ft1.w   , fc3.y",
 	"pow ft1.w     ,  fc3.x   , ft1.w",
 	"mul ft1.xyz   ,  ft1.xyz , ft1.w",
 	"mul ft1.xyz   ,  ft1.xyz , fc3.z",
 	"mul ft0.xyz   ,  ft1.xyz , ft0.xyz	",
-	"tex ft1       ,  v2.xyz  , fs1 &lt;cube,nearest,clamp&gt;",
+	"tex ft1       ,  v2.xyz  , fs1 <cube,nearest,clamp>",
 	"div ft1.w     ,  ft1.w   , fc0.z",
 	"sub ft1.w     ,  ft1.w   , fc4.z",
 	"pow ft1.w     ,  fc4.x   , ft1.w",
@@ -276,7 +291,7 @@ const F_AGAL : String =  [
 	"add ft1.w     ,  ft1.w   , fc1.z",
 	"mul ft1.xyz   ,  ft1.xyz , ft1.w",
 	"add ft0.xyz   ,  ft0.xyz , ft1.xyz",			
-	"tex ft1       ,  v0      , fs2 &lt;2d,nearest,clamp,dxt1&gt;",
+	"tex ft1       ,  v0      , fs2 <2d,nearest,clamp,dxt1>",
 	"mul ft0.xyz   ,  ft0.xyz , ft1.x",
 	"mul ft0.xyz   ,  ft0.xyz , fc5.x",
 	"pow ft0.xyz   ,  ft0.xyz , fc5.y",

@@ -30,6 +30,7 @@ package com.instagal.tests {
 			new Indirect_op3_nomask().run();
 			new Indirect_mask().run();
 			new Indirect_mask_off().run();
+			//new FullyInlined().run();
 			
 			stage.addChild( _console );
 		}
