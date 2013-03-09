@@ -319,10 +319,10 @@ package com.instagal {
 			Agal._writeNullDest( pos );
 			
 			// SRC 1
-			if ( ( src & 0x10000 ) == 0x10000 )  // indirect
-				Agal._writeSource1I( pos, src );
-			else 
+			if ( ( src & 0x10000 ) == 0 )  // indirect
 				Agal._writeSource1D( pos, src );
+			else 
+				Agal._writeSource1I( pos, src );
 
 			// SRC 2 (nil)
 			Agal._writeNullSrc2( pos );
@@ -341,10 +341,10 @@ package com.instagal {
 			Agal._writeDest(pos, dest);
 
 			// SRC 1
-			if ( ( src & 0x10000 ) == 0x10000 )  // indirect
-				Agal._writeSource1I( pos, src );
-			else 
+			if ( ( src & 0x10000 ) == 0 )  // indirect
 				Agal._writeSource1D( pos, src );
+			else 
+				Agal._writeSource1I( pos, src );
 
 			// SRC 2 (nil)
 			Agal._writeNullSrc2( pos );
@@ -358,16 +358,16 @@ package com.instagal {
 			Agal._writeDest(pos, dest);
 
 			// SRC 1
-			if ( ( src1 & 0x10000 ) == 0x10000 )  // indirect
-				Agal._writeSource1I( pos, src1 );
-			else 
+			if ( ( src1 & 0x10000 ) == 0 )  // indirect
 				Agal._writeSource1D( pos, src1 );
+			else 
+				Agal._writeSource1I( pos, src1 );
 			
 			// SRC 2
-			if ( ( src2 & 0x10000 ) == 0x10000 )  // indirect
-				Agal._writeSource2I( pos, src2 );
-			else 
+			if ( ( src2 & 0x10000 ) == 0 )  // indirect
 				Agal._writeSource2D( pos, src2 );
+			else 
+				Agal._writeSource2I( pos, src2 );
 			
 			Agal._forward(pos);
 		}
@@ -379,10 +379,10 @@ package com.instagal {
 
 
 			// SRC 1
-			if ( ( src & 0x10000 ) == 0x10000 )  // indirect
-				Agal._writeSource1I( pos, src );
-			else 
+			if ( ( src & 0x10000 ) == 0 )  // indirect
 				Agal._writeSource1D( pos, src );
+			else 
+				Agal._writeSource1I( pos, src );
 
 			
 			// SAMPLER
