@@ -31,7 +31,7 @@ package com.instagal.tests {
 			var legacyResult : ByteArray = new AGALMiniAssembler().assemble(_agalType, _agalString, _agalVersion);
 			_shader = new Shader( _agalType, _agalVersion );
 			_compile();
-			var tresult : ByteArray = _shader.release();
+			var tresult : ByteArray = _shader.complete();
 			
 			trace( "Compare agal values for ",_name );
 			Utils.logBytes( legacyResult, 7 );

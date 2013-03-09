@@ -16,7 +16,7 @@ package com.instagal.bench {
 	/**
 	 * @author plepers
 	 */
-	public class BenchCompiler {
+	public class RevertBenchCompiler {
 		
 		internal var tf : TextField;
 		
@@ -24,9 +24,9 @@ package com.instagal.bench {
 		private var _compileNum : int = 0;
 		
 		
-		private var looptime : int = 1000;
+		private var _frame : int = 200; // ms
 		
-		public function BenchCompiler() {
+		public function RevertBenchCompiler() {
 
 			tf = new TextField();
 			tf.autoSize = TextFieldAutoSize.LEFT;
@@ -37,7 +37,6 @@ CONFIG::mini {
 			tf.appendText( "Bench AgalMiniAssembler (click to run) \n" );
 }
 CONFIG::insta {
-			looptime *= 100;
 			tf.appendText( "Bench Instagal Assembler (click to run) \n" );
 }
 		}
@@ -57,18 +56,18 @@ CONFIG::insta {
 			if( tf.numLines > 15 ) tf.text = "";
 			
 CONFIG::mini {	
-			tf.appendText( " "+ _compileNum + " compilations in "+ _score + " ms \n" );
+			tf.appendText( " "+ _compileNum + " compilations in "+ _frame + " ms \n" );
 }
 CONFIG::insta {
-			tf.appendText( " "+ _compileNum + " compilations in "+ ( _score / 100 ).toFixed(2) + " ms \n" );
+			tf.appendText( " "+ _compileNum + " compilations in "+ _frame + " ms \n" );
 }
 		}
 		
 
 		private function staticInit() : void {
 			// run some loop to don't take in account static initialization time
-			var ol : int = looptime;
-			looptime = 1;
+			var ol : int = _frame;
+			_frame = 10;
 			
 			var comp : Boolean;
 			
@@ -82,36 +81,23 @@ CONFIG::insta {
 			if( ! comp ) 
 				tf.appendText( "Oups, broken vertex shader\n" );
 			
-			looptime = ol;
+			_frame = ol;
 		}
 		
 		
 		
 		private function _runVertexLoopMini() : ByteArray {
 			
-			_compileNum += looptime;
-			
 			var vba : ByteArray;
-			
+			var st : int;
 			var ama : AGALMiniAssembler = new AGALMiniAssembler();
-			
-			var st : int, et : int;
-			var i : int;
-			
-			var time : int;
 			
 			st = getTimer();
 			
-			for ( i = 0; i < looptime; i++) {
+			while( getTimer() - st < _frame){
 				vba = ama.assemble( "vertex", V_AGAL );
+				_compileNum++;
 			}
-			
-			et = getTimer();
-			
-			time = (et-st);
-			
-			
-			_score += time;
 			
 			return vba;
 		}
@@ -119,7 +105,6 @@ CONFIG::insta {
 
 		private function _runVertexLoopInsta() : ByteArray {
 			
-			_compileNum += looptime;
 
 CONFIG::insta_writeb {
 			var vba : ByteArray = new ByteArray();
@@ -128,16 +113,12 @@ CONFIG::insta_complete {
 			var vba : ByteArray;
 }
 			
-			var st : int, et : int;
-			var i : int;
 			var shader : Shader;
-			
-			var time : int;
-			
+			var st : int;
 			
 			st = getTimer();
 			
-			for ( i = 0; i < looptime; i++) {
+			while( getTimer() - st < _frame){
 				shader = new Shader( Context3DProgramType.VERTEX );
 				shader.mov( t0, 	a0 					);      
 				shader.mov( t2, 	a2                  );
@@ -164,18 +145,8 @@ CONFIG::insta_writeb {
 CONFIG::insta_complete {
 				vba = shader.complete();
 }
+				_compileNum++;
 			}
-			
-			et = getTimer();
-			
-			time = (et-st);
-			
-			//tf.appendText( "mini  : "+ looptime + " compilations in "+ slow + " ms \n" );
-			//tf.appendText( "insta : "+ looptime + " compilations in "+ fast + " ms \n" );
-			//tf.appendText( "insta : compile "+ ( slow/fast ).toFixed(2) + " times faster \n" );
-			
-			_score += time;
-			
 			
 			return vba;
 		}
@@ -184,36 +155,22 @@ CONFIG::insta_complete {
 
 		private function _runFragmentLoopMini() : ByteArray {
 			
-			_compileNum += looptime;
-			
 			var vba : ByteArray;
-			
+			var st : int;
 			var ama : AGALMiniAssembler = new AGALMiniAssembler();
-			
-			var st : int, et : int;
-			var i : int;
-			
-			var time : int;
 			
 			st = getTimer();
 			
-			for ( i = 0; i < looptime; i++) {
+			while( getTimer() - st < _frame){
 				vba = ama.assemble( "fragment", F_AGAL, 2 );
+				_compileNum++;
 			}
-			
-			et = getTimer();
-			
-			time = (et-st);
-			
-		
-			_score += time;
 			
 			return vba;
 		}
 		
 		private function _runFragmentLoopInsta() : ByteArray {
 			
-			_compileNum += looptime;
 
 CONFIG::insta_writeb {
 			var vba : ByteArray = new ByteArray();
@@ -222,15 +179,12 @@ CONFIG::insta_complete {
 			var vba : ByteArray;
 }
 			
-			var st : int, et : int;
-			var i : int;
 			var shader : Shader;
-			
-			var time : int;
+			var st : int;
 			
 			st = getTimer();
 			
-			for ( i = 0; i < looptime; i++) {
+			while( getTimer() - st < _frame){
 				shader = new Shader( Context3DProgramType.FRAGMENT, 2 );
 				shader.mov( t0 	   , c2        );      
 				shader.tex( t1 	   , v1       ,s0 | Tex.CUBE | Tex.NEAREST | Tex.CLAMP    );
@@ -262,13 +216,8 @@ CONFIG::insta_writeb {
 CONFIG::insta_complete {
 				vba = shader.complete();
 }
+				_compileNum++;
 			}
-			
-			et = getTimer();
-			
-			time = (et-st);
-			
-			_score += time;
 			
 			return vba;
 		}
