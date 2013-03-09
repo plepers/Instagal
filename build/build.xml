@@ -102,9 +102,6 @@
     	<tdsi inline="true" macro="true" in="${basedir}/bin/MiscTests_inter.swf" out="${basedir}/bin/MiscTests.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}">
 			<classpath refid="apparat.path" />
     	</tdsi>
-		<asmifier in="${basedir}/bin/MiscTests.swf" out="${basedir}/bin/MiscTests.asm" fork="true" >
-			<classpath refid="apparat.path" />
-		</asmifier >
     </target>
 
 	<!-- ================================= 
@@ -129,6 +126,9 @@
     	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/bench_insta.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
     	</tdsi>
+		<asmifier in="${basedir}/tests/bin/bench_insta.swf" out="${basedir}/tests/asm" fork="true" >
+			<classpath refid="apparat.path" />
+		</asmifier >
     </target>
 
 	<!-- ================================= 

@@ -1,7 +1,7 @@
 package com.instagal {
-
-	import apparat.memory.Memory;
 	import apparat.inline.Macro;
+	import apparat.memory.Memory;
+	import apparat.asm.*;
 
 	/**
 	 * @author Pierre Lepers
@@ -13,6 +13,7 @@ package com.instagal {
 		
 		public static function mov(pos : uint, dest : uint, src : uint) : void {
 			Memory.writeInt(0x00, pos);
+//			Agal._forward( pos );
 			Agal._writeOp2(pos, dest, src);
 		}
 
@@ -198,16 +199,16 @@ package com.instagal {
 			Agal._writeOp3(pos, dest, src1, src2);
 		}
 		
-		// ---- SAMPLERS
+		// ---- OP TEX
 		
 		public static function ted(pos : uint, dest : uint, tcoord : uint, samp : uint) : void {
 			Memory.writeInt(0x26, pos);
-			Agal._writeSampler(pos, dest, tcoord, samp);
+			Agal._writeOpTex(pos, dest, tcoord, samp);
 		}
 
 		public static function tex(pos : uint, dest : uint, tcoord : uint, samp : uint) : void {
 			Memory.writeInt(0x28, pos);
-			Agal._writeSampler(pos, dest, tcoord, samp);
+			Agal._writeOpTex(pos, dest, tcoord, samp);
 		}
 
 		// ---- OP 1
@@ -235,155 +236,123 @@ package com.instagal {
 			Memory.writeInt(0, pos += 4);
 			
 			
-			// SRC
-			// SRC
-			if ( ( src & 0x10000 ) == 0x10000 ) {
-				Memory.writeInt(0, pos += 4);// TODO implement indirect
-			} else {
-				Memory.writeInt( src & 0xFF000FFF, pos += 4);
-			}
+			// SRC 1
+			if ( ( src & 0x10000 ) == 0x10000 )  // indirect
+				Agal._writeSourceI( pos, src );
+			else 
+				Agal._writeSourceD( pos, src );
 
-			Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
-			
-			// null src 2
-			Memory.writeInt(0, pos += 4);
-			Memory.writeInt(0, pos += 4);
+			// SRC 2 (nil)
+			Agal._writeNullShort( pos );
 
 			pos += 4;
 		}
 
 		public static function _writeOp0(pos : uint) : void {
-			Memory.writeInt(0, pos += 4);
-			Memory.writeInt(0, pos += 4);
-			Memory.writeInt(0, pos += 4);
-			Memory.writeInt(0, pos += 4);
-			Memory.writeInt(0, pos += 4);
+			Agal._writeNullToken(pos);
 
 			pos += 4;
 		}
 
 		public static function _writeOp2(pos : uint, dest : uint, src : uint) : void {
+			
 			// DEST
-			Memory.writeInt(
-				( ( 
-					( 1 << ((dest >>> 24) & 3) ) | 
-					( 1 << ((dest >>> 26) & 3) ) | 
-					( 1 << ((dest >>> 28) & 3) ) | 
-					( 1 << ((dest >>> 30) & 3) ) 
-				  ) << 16 
-				) | 
-				(dest & 0xfff) |
-				((dest & 0xF000) << 12 ),
-				pos += 4
-			);
+			Agal._writeDest(pos, dest);
 
-			// SRC
-			if ( ( src & 0x10000 ) == 0x10000 ) { // indirect
-				Memory.writeInt( 
-					(src & 0xFF000000) |
-					( (src & 0x3F) <<16 ) |
-					( (src >>> 17 ) & 0x7F ) ,
-					pos += 4 
-				);
-				Memory.writeInt(
-					( src & 0xF00 ) |  // index type I
-					(( src >>> 12 ) & 0xF ) | // type T
-					(( src << 10 ) & 0x30000) | //index comp Q
-					0x80000000, 
-					pos += 4
-				);
-			} else {
-				Memory.writeInt( src & 0xFF000FFF, pos += 4);
-				Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
-			}
+			// SRC 1
+			if ( ( src & 0x10000 ) == 0x10000 )  // indirect
+				Agal._writeSourceI( pos, src );
+			else 
+				Agal._writeSourceD( pos, src );
 
-
-			// 0 (SRC2)
-			Memory.writeInt(0, pos += 4);
-			Memory.writeInt(0, pos += 4);
+			// SRC 2 (nil)
+			Agal._writeNullShort( pos );
 
 			pos += 4;
 		}
 
 		public static function _writeOp3(pos : uint, dest : uint, src1 : uint, src2 : uint) : void {
+			
 			// DEST
-			Memory.writeInt(
-				( ( 
-					( 1 << ((dest >>> 24) & 3) ) | 
-					( 1 << ((dest >>> 26) & 3) ) | 
-					( 1 << ((dest >>> 28) & 3) ) | 
-					( 1 << ((dest >>> 30) & 3) ) 
-				  ) << 16 
-				) | 
-				(dest & 0x0FFF) |
-				((dest & 0xF000) << 12 ),
-				pos += 4
-			);
+			Agal._writeDest(pos, dest);
 
 			// SRC 1
-			if ( ( src1 & 0x10000 ) == 0x10000 ) { // indirect
-				Memory.writeInt( 
-					(src1 & 0xFF000000) |
-					( (src1 & 0x3F) <<16 ) |
-					( (src1 >>> 17 ) & 0x7F ) ,
-					pos += 4 
-				);
-				Memory.writeInt(
-					( src1 & 0xF00 ) |  // index type I
-					(( src1 >>> 12 ) & 0xF ) | // type T
-					(( src1 << 10 ) & 0x30000) | //index comp Q
-					0x80000000, 
-					pos += 4
-				);
-			} else {
-				Memory.writeInt( src1 & 0xFF000FFF, pos += 4);
-				Memory.writeInt(( src1 >>> 12 ) & 0xF, pos += 4);
-			}
+			if ( ( src1 & 0x10000 ) == 0x10000 )  // indirect
+				Agal._writeSourceI( pos, src1 );
+			else 
+				Agal._writeSourceD( pos, src1 );
 			
 			
 			
 			// SRC 2
-			if ( ( src2 & 0x10000 ) == 0x10000 ) { // indirect
-				Memory.writeInt( 
-					(src2 & 0xFF000000) |
-					( (src2 & 0x3F) <<16 ) |
-					( (src2 >>> 17 ) & 0x7F ) ,
-					pos += 4 
-				);
-				Memory.writeInt(
-					( src2& 0xF00 ) |  // index type I
-					(( src2 >>> 12 ) & 0xF ) | // type T
-					(( src2 << 10 ) & 0x30000) | //index comp Q
-					0x80000000, 
-					pos += 4
-				);
-			} else {
-				Memory.writeInt( src2 & 0xFF000FFF, pos += 4);
-				Memory.writeInt(( src2 >>> 12 ) & 0xF, pos += 4);
-			}
+			if ( ( src2 & 0x10000 ) == 0x10000 )  // indirect
+				Agal._writeSourceI( pos, src2 );
+			else 
+				Agal._writeSourceD( pos, src2 );
+			
 
 
 			pos += 4;
 		}
 		
-		public static function _writeSampler(pos : uint, dest : uint, src : uint, samp : uint) : void {
+		public static function _writeOpTex(pos : uint, dest : uint, src : uint, samp : uint) : void {
 			
 			// DEST
-			Memory.writeInt(
-				( ( 
-					( 1 << ((dest >>> 24) & 3) ) | 
-					( 1 << ((dest >>> 26) & 3) ) | 
-					( 1 << ((dest >>> 28) & 3) ) | 
-					( 1 << ((dest >>> 30) & 3) ) 
-				  ) << 16 
-				) | 
-				(dest & 0x0FFF) |
-				((dest & 0xF000) << 12 ),
-				pos += 4
-			);
+			Agal._writeDest(pos, dest);
 
-			// SRC
-			if ( ( src & 0x10000 ) == 0x10000 ) { // indirect
+
+			// SRC 1
+			if ( ( src & 0x10000 ) == 0x10000 )  // indirect
+				Agal._writeSourceI( pos, src );
+			else 
+				Agal._writeSourceD( pos, src );
+
+			
+			// SAMPLER
+			Agal._writeSampler( pos, samp );
+
+			pos += 4;
+		}
+		
+		public static function _forward ( pos : uint ) : void {
+			__asm(
+				//pos += 4;
+					GetLocal( pos ),          
+			        PushByte(4),         
+			        Add,         
+			        SetLocal(pos)      
+				);
+		}
+		
+		public static function _writeSourceD ( pos : uint, src : uint ) : void {
+			__asm(
+				//Memory.writeInt( src & 0xFF000FFF, pos += 4);
+				//Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
+					GetLocal( src ),          
+			        PushUInt(4278194175),  //0xFF000FFF       
+			        BitAnd,         
+			        GetLocal(pos),         
+			        PushByte(4),         
+			        Add,         
+			        SetInt,   
+				
+					GetLocal( src ),         
+			        PushByte(12),         
+        			ShiftRightUnsigned,
+					PushByte(15),         
+       				BitAnd,        
+			        GetLocal(pos),         
+			        PushByte(8),         
+			        Add,         
+			        Dup,         
+			        SetLocal(pos),         
+			        SetInt    
+				);
+		}
+
+		public static function _writeSourceI ( pos : uint, src : uint ) : void {
+			__asm(
+				/*
 				Memory.writeInt( 
 					(src & 0xFF000000) |
 					( (src & 0x3F) <<16 ) |
@@ -397,20 +366,198 @@ package com.instagal {
 					0x80000000, 
 					pos += 4
 				);
-			} else {
-				Memory.writeInt( src & 0xFF000FFF, pos += 4);
-				Memory.writeInt(( src >>> 12 ) & 0xF, pos += 4);
-			}
-			
-			// SAMPLER
-			Memory.writeInt( ( samp & 0xFF) , pos += 4);
-			Memory.writeInt( ( samp & 0xFFFFFF00) | 0x5, pos += 4);
-
-
-			pos += 4;
+				 */
+					GetLocal(src),         
+			        PushUInt(4278190080),         
+			        BitAnd,         
+			        GetLocal(src),         
+			        PushByte(63),         
+			        BitAnd,         
+			        PushByte(16),         
+			        ShiftLeft,         
+			        BitOr,         
+			        GetLocal(src),         
+			        PushByte(17),         
+			        ShiftRightUnsigned,         
+			        PushByte(127),         
+			        BitAnd,         
+			        BitOr,         
+			        GetLocal(pos),         
+			        PushByte(4),         
+			        Add,         
+			        SetInt,         
+			        GetLocal(src),         
+			        PushShort(3840),         
+			        BitAnd,         
+			        GetLocal(src),         
+			        PushByte(12),         
+			        ShiftRightUnsigned,         
+			        PushByte(15),         
+			        BitAnd,         
+			        BitOr,         
+			        GetLocal(src),         
+			        PushByte(10),         
+			        ShiftLeft,         
+			        PushInt(196608),         
+			        BitAnd,         
+			        BitOr,         
+			        PushUInt(2147483648),         
+			        BitOr,         
+			        GetLocal(pos),         
+			        PushByte(8),         
+			        Add,         
+			        Dup,         
+			        SetLocal(pos),         
+			        SetInt        
+				);
 		}
-		
-		public static function _indirection( reg : uint ) : void {
+
+		public static function _writeNullShort ( pos : uint ) : void {
+			__asm(
+			//Memory.writeInt(0, pos += 4);
+			//Memory.writeInt(0, pos += 4);
+				PushByte(0),         
+		        GetLocal(pos),         
+		        PushByte(4),         
+		        Add,        
+		        SetInt,         
+		        PushByte(0),         
+		        GetLocal(pos),         
+		        PushByte(8),         
+		        Add,
+				Dup,         
+		        SetLocal(pos),   
+		        SetInt
+			);
+		}
+
+		public static function _writeNullToken ( pos : uint ) : void {
+			__asm(
+			//Memory.writeInt(0, pos += 4);
+			//Memory.writeInt(0, pos += 4);
+			//Memory.writeInt(0, pos += 4);
+			//Memory.writeInt(0, pos += 4);
+			//Memory.writeInt(0, pos += 4);
+				PushByte(0),         
+		        GetLocal(pos),         
+		        PushByte(4),         
+		        Add,         
+		        SetInt,         
+		        PushByte(0),         
+		        GetLocal( pos ),         
+		        PushByte(8),         
+		        Add,         
+		        SetInt,         
+		        PushByte(0),         
+		        GetLocal( pos ),         
+		        PushByte(12),         
+		        Add,         
+		        SetInt,         
+		        PushByte(0),         
+		        GetLocal( pos ),         
+		        PushByte(16),         
+		        Add,         
+		        SetInt,         
+		        PushByte(0),         
+		        GetLocal( pos ),         
+		        PushByte(20),         
+		        Add,         
+		        Dup,         
+		        SetLocal( pos ),         
+		        SetInt
+			);
+		}
+
+		public static function _writeSampler( pos : uint, samp : uint ) : void {
+			__asm(
+			//Memory.writeInt( ( samp & 0xFF) , pos += 4);
+			//Memory.writeInt( ( samp & 0xFFFFFF00) | 0x5, pos += 4);
+				GetLocal(samp),         
+		        PushShort(255),         
+		        BitAnd,         
+		        GetLocal(pos),         
+		        PushByte(4),         
+		        Add,         
+		        SetInt,         
+		        GetLocal(samp),         
+		        PushUInt(4294967040),         
+		        BitAnd,         
+		        PushByte(5),         
+		        BitOr,         
+		        GetLocal(pos),         
+		        PushByte(8),         
+		        Add,         
+		        Dup,         
+		        SetLocal(pos),         
+		        SetInt
+			);
+		}
+
+		public static function _writeDest ( pos : uint, dest : uint ) : void {
+			__asm(
+			/*
+			Memory.writeInt(
+				( ( 
+					( 1 << ((dest >>> 24) & 3) ) | 
+					( 1 << ((dest >>> 26) & 3) ) | 
+					( 1 << ((dest >>> 28) & 3) ) | 
+					( 1 << ((dest >>> 30) & 3) ) 
+				  ) << 16 
+				) | 
+				(dest & 0x0FFF) |
+				((dest & 0xF000) << 12 ),
+				pos += 4
+			);*/
+		        PushByte(1),         
+		        GetLocal(dest),         
+		        PushByte(24),         
+		        ShiftRightUnsigned,         
+		        PushByte(3),         
+		        BitAnd,         
+		        ShiftLeft,         
+		        PushByte(1),         
+		        GetLocal(dest),         
+		        PushByte(26),         
+		        ShiftRightUnsigned,         
+		        PushByte(3),         
+		        BitAnd,         
+		        ShiftLeft,         
+		        BitOr,         
+		        PushByte(1),         
+		        GetLocal(dest),         
+		        PushByte(28),         
+		        ShiftRightUnsigned,         
+		        PushByte(3),         
+		        BitAnd,         
+		        ShiftLeft,         
+		        BitOr,         
+		        PushByte(1),         
+		        GetLocal(dest),         
+		        PushByte(30),         
+		        ShiftRightUnsigned,         
+		        PushByte(3),         
+		        BitAnd,         
+		        ShiftLeft,         
+		        BitOr,         
+		        PushByte(16),         
+		        ShiftLeft,         
+		        GetLocal(dest),         
+		        PushShort(4095),         
+		        BitAnd,         
+		        BitOr,         
+		        GetLocal(dest),         
+		        PushInt(61440),         
+		        BitAnd,         
+		        PushByte(12),         
+		        ShiftLeft,         
+		        BitOr,         
+		        GetLocal(pos),         
+		        PushByte(4),         
+		        Add,         
+		        Dup,         
+		        SetLocal(pos),         
+		        SetInt
+			);
 		}
 		
 	}

@@ -25,7 +25,7 @@ package com.instagal.bench {
 		private var _compileNum : int = 0;
 		
 		
-		private var looptime : int = 2000;
+		private var looptime : int = 1000;
 		
 		public function BenchCompiler() {
 			stage.addEventListener( MouseEvent.CLICK, onClick );
@@ -37,13 +37,14 @@ package com.instagal.bench {
 			staticInit();
 			
 CONFIG::mini {	
-			tf.appendText( "Bench AgalMiniAssembler (click to start) \n" );
+			tf.appendText( "Bench AgalMiniAssembler (click to run) \n" );
 }
 CONFIG::insta { 		
-			tf.appendText( "Bench Instagal Assembler (click to start) \n" );
+			tf.appendText( "Bench Instagal Assembler (click to run) \n" );
 }
 		}
 		private function onClick(event : MouseEvent) : void {
+
 			_compileNum = 0;
 			_score = 0;
 			
@@ -57,7 +58,7 @@ CONFIG::insta {
 		private function staticInit() : void {
 			// run some loop to don't take in account static initialization time
 			var ol : int = looptime;
-			looptime = 10;
+			looptime = 1;
 			_runFragmentLoop();
 			_runVertexLoop();
 			looptime = ol;
@@ -232,52 +233,54 @@ CONFIG::insta {
 
 
 
-
-
+// be fair, 
+// don't construct the string in loops
 
 const V_AGAL : String =  [
-"mov vt0, va0                   ",
-"mov vt2, va2                   ",
-"m44 vt7, vt0, vc0		        ",
-"mul op, vt7, vc4               ",
-"mov v0, va1                    ",
-"m44 vt1.xyz, vt0, vc5          ",
-"mov vt1.w, vt0.w               ",
-"m33 vt3.xyz, vt2.xyz, vc9      ",
-"mov vt3.w, vt2.w	            ",
-"mov v1, vt3	                ",
-"sub vt2, vc13, vt1             ",
-"nrm vt4.xyz,vt2.xyz            ",
-"dp3 vt1.w, vt3.xyz, vt4.xyz    ",
-"sub v2.w, vc13.w, vt1.w        ",
-"add vt1.w, vt1.w, vt1.w        ",
-"mul vt1.xyz, vt3.xyz, vt1.w	",					
-"sub vt1.xyz, vt1.xyz, vt4.xyz	",				
-"nrm v2.xyz, vt1.xyz			" 
+	"mov vt0, va0",
+	"mov vt2, va2",
+	"m44 vt7, vt0, vc0",
+	"mul op, vt7, vc4",
+	"mov v0, va1",
+	"m44 vt1.xyz, vt0, vc5",
+	"mov vt1.w, vt0.w",
+	"m33 vt3.xyz, vt2.xyz, vc9",
+	"mov vt3.w, vt2.w",
+	"mov v1, vt3",
+	"sub vt2, vc13, vt1",
+	"nrm vt4.xyz,vt2.xyz",
+	"dp3 vt1.w, vt3.xyz, vt4.xyz",
+	"sub v2.w, vc13.w, vt1.w",
+	"add vt1.w, vt1.w, vt1.w",
+	"mul vt1.xyz, vt3.xyz, vt1.w",					
+	"sub vt1.xyz, vt1.xyz, vt4.xyz",				
+	"nrm v2.xyz, vt1.xyz" 
 ].join( '\n' );
 
 const F_AGAL : String =  [
-"mov ft0 	   ,  fc2                                 ",
-"tex ft1 	   ,  v1      , fs0 <cube,nearest,clamp>  ",
-"div ft1.w     ,  ft1.w   , fc0.z	                  ",
-"sub ft1.w     ,  ft1.w   , fc3.y	                  ",
-"pow ft1.w     ,  fc3.x   , ft1.w	                  ",
-"mul ft1.xyz   ,  ft1.xyz , ft1.w	                  ",
-"mul ft1.xyz   ,  ft1.xyz , fc3.z	                  ",
-"mul ft0.xyz   ,  ft1.xyz , ft0.xyz	                  ",
-"tex ft1       ,  v2.xyz  , fs1 <cube,nearest,clamp>  ",
-"div ft1.w     ,  ft1.w   , fc0.z	                   ",
-"sub ft1.w     ,  ft1.w   , fc4.z	                   ",
-"pow ft1.w     ,  fc4.x   , ft1.w	                       ",
-"mul ft1.xyz   ,  ft1.xyz , ft1.w	                    ",
-"pow ft1.w     ,  v2.w    , fc4.y	                       ",
-"mul ft1.w     ,  ft1.w   , fc1.w	                   ",
-"add ft1.w     ,  ft1.w   , fc1.z	                   ",
-"mul ft1.xyz   ,  ft1.xyz , ft1.w	                   ",
-"add ft0.xyz   ,  ft0.xyz , ft1.xyz				       ",			
-"tex ft1       ,  v0      , fs2 <2d,nearest,clamp,dxt1>   ",
-"mul ft0.xyz   ,  ft0.xyz , ft1.x                        ",
-"mul ft0.xyz   ,  ft0.xyz , fc5.x                        ",
-"pow ft0.xyz   ,  ft0.xyz , fc5.y	                    ",
-"mov oc        ,  ft0                                        "
+	"mov ft0 	   ,  fc2",
+	"tex ft1 	   ,  v1      , fs0 &lt;cube,nearest,clamp&gt;",
+	"div ft1.w     ,  ft1.w   , fc0.z",
+	"sub ft1.w     ,  ft1.w   , fc3.y",
+	"pow ft1.w     ,  fc3.x   , ft1.w",
+	"mul ft1.xyz   ,  ft1.xyz , ft1.w",
+	"mul ft1.xyz   ,  ft1.xyz , fc3.z",
+	"mul ft0.xyz   ,  ft1.xyz , ft0.xyz	",
+	"tex ft1       ,  v2.xyz  , fs1 &lt;cube,nearest,clamp&gt;",
+	"div ft1.w     ,  ft1.w   , fc0.z",
+	"sub ft1.w     ,  ft1.w   , fc4.z",
+	"pow ft1.w     ,  fc4.x   , ft1.w",
+	"mul ft1.xyz   ,  ft1.xyz , ft1.w",
+	"pow ft1.w     ,  v2.w    , fc4.y",
+	"mul ft1.w     ,  ft1.w   , fc1.w",
+	"add ft1.w     ,  ft1.w   , fc1.z",
+	"mul ft1.xyz   ,  ft1.xyz , ft1.w",
+	"add ft0.xyz   ,  ft0.xyz , ft1.xyz",			
+	"tex ft1       ,  v0      , fs2 &lt;2d,nearest,clamp,dxt1&gt;",
+	"mul ft0.xyz   ,  ft0.xyz , ft1.x",
+	"mul ft0.xyz   ,  ft0.xyz , fc5.x",
+	"pow ft0.xyz   ,  ft0.xyz , fc5.y",
+	"mov oc        ,  ft0"
 ].join( '\n' );
+
+
