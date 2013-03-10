@@ -637,19 +637,65 @@ package com.instagal {
 		}
 
 		public static function _writeSampler( pos : uint, samp : uint ) : void {
+			//Memory.writeInt( 
+			//	( samp & 0x1F ) | (( samp & 0xF00 )<<11)
+			//	 , pos + 16 );
+			//Memory.writeInt( ( samp & 0xFFFFFF00) | 0x5, pos += 4);
+				
+				
 			__asm(
 			//Memory.writeInt( ( samp & 0xFF) , pos += 4);
 			//Memory.writeInt( ( samp & 0xFFFFFF00) | 0x5, pos += 4);
+			
 				GetLocal(samp),         
-				PushShort(255),         
+				PushShort(31), //   0x1F	index   
 				BitAnd,         
+				GetLocal(samp),         
+				PushShort(8160), // 0x1FE0	bias         
+				BitAnd,
+				PushByte(11),         
+				ShiftLeft,         
+				BitOr,      
 				GetLocal(pos),    
 				PushByte(16),         
 				Add,         
-				SetInt,         
+				SetInt,
+				
+				//empty stack  
 				GetLocal(samp),         
-				PushUInt(4294967040),         
+				PushUInt(3758096384), 	// 0xE0000000 	filter   
 				BitAnd,         
+				PushByte(1),  
+				ShiftRightUnsigned, 
+				    
+				GetLocal(samp),         
+				PushUInt(469762048),	// 0x1C000000	mimmap
+				BitAnd,         
+				PushByte(2),  
+				ShiftRightUnsigned,     
+				BitOr,      
+
+				GetLocal(samp),         
+				PushUInt(66584576),		// 0x03800000	wrapping + specials
+				BitAnd,         
+				PushByte(3),  
+				ShiftRightUnsigned,     
+				BitOr,      
+
+				GetLocal(samp),         
+				PushUInt(458752),		// 0x70000  	dimensions
+				BitAnd,         
+				PushByte(4),  
+				ShiftRightUnsigned,     
+				BitOr,
+
+				GetLocal(samp),         
+				PushUInt(57344), 		// 0xE000	  	type
+				BitAnd,         
+				PushByte(5),  
+				ShiftRightUnsigned,     
+				BitOr,
+				         
 				PushByte(5),         
 				BitOr,         
 				GetLocal(pos),         

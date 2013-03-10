@@ -203,7 +203,7 @@ package com.instagal {
 			Agal.eif(__byRef(this._ptr));
 		}
 
-		public function dipose() : void {
+		public function dispose() : void {
 			if( null != _memoryBlock ) 
 				Shader.releaseBlock(_memoryBlock);
 			_memoryBlock = null;

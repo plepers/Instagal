@@ -26,6 +26,7 @@ package com.instagal.tests {
 			new Swizzle().run();
 			new Samplers_noOpt().run();
 			new Samplers_opt().run();
+			new Samplers_bias().run();
 			new Indirect_op2_nomask().run();
 			new Indirect_op3_nomask().run();
 			new Indirect_mask().run();
