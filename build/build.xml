@@ -42,6 +42,39 @@
 	</target>
 
 	<!-- ================================= 
+          target: swc              
+         ================================= -->
+	<target name="swc" depends="init" description="description">
+		<compc output="${basedir}/bin/instagal.swc">
+			<library-path dir="${basedir}/libs" includes="**/*.swc" />
+			<source-path path-element="${basedir}/src" />
+			<source-path path-element="${basedir}/gen" />
+			<include-sources dir="${basedir}/gen" includes="**/*.as" />
+			<include-sources dir="${basedir}/src" includes="**/*.as" />
+		</compc>
+		<tdsi inline="true"
+		      macro="true"
+		      in="${basedir}/bin/instagal.swc"
+		      fork="true"
+		      jvmargs="-Dapparat.7z.path=${7Z}">
+			<classpath refid="apparat.path" />
+		</tdsi>
+	</target>
+
+	<!-- ================================= 
+          target: units              
+         ================================= -->
+	<target name="units" depends="init" description="description">
+		<mxmlc file="${basedir}/tests/src/com/instagal/tests/UnitTests.as"
+		       output="${basedir}/tests/bin/tests.swf">
+			<library-path dir="${basedir}/bin" includes="instagal.swc" />
+			<source-path path-element="${basedir}/tests/src" />
+		</mxmlc>
+	</target>
+
+
+
+	<!-- ================================= 
           target: build reggen              
          ================================= -->
 	<target name="build reggen" depends="init" description="description">
@@ -91,81 +124,119 @@
 		</exec>
 	</target>
 
-	
+
 	<!-- ================================= 
           target: tdsi test              
          ================================= -->
-    <target name="tdsi test" depends="init" description="description">
-    	<stripper in="${basedir}/bin/MiscTests_inter.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+	<target name="tdsi test" depends="init" description="description">
+		<stripper in="${basedir}/bin/MiscTests_inter.swf"
+		          fork="true"
+		          jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
-    	</stripper>
-    	<tdsi inline="true" macro="true" in="${basedir}/bin/MiscTests_inter.swf" out="${basedir}/bin/MiscTests.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}">
+		</stripper>
+		<tdsi inline="true"
+		      macro="true"
+		      in="${basedir}/bin/MiscTests_inter.swf"
+		      out="${basedir}/bin/MiscTests.swf"
+		      fork="true"
+		      jvmargs="-Dapparat.7z.path=${7Z}">
 			<classpath refid="apparat.path" />
-    	</tdsi>
-    </target>
+		</tdsi>
+	</target>
 
 	<!-- ================================= 
           target: tdsi bench              
          ================================= -->
-    <target name="tdsi bench" depends="init" description="description">
-    	<stripper in="${basedir}/tests/bin/bench_inter.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+	<target name="tdsi bench" depends="init" description="description">
+		<stripper in="${basedir}/tests/bin/bench_inter.swf"
+		          fork="true"
+		          jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
-    	</stripper>
-    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/bench_inter.swf" out="${basedir}/tests/bin/bench.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+		</stripper>
+		<tdsi inline="true"
+		      macro="true"
+		      in="${basedir}/tests/bin/bench_inter.swf"
+		      out="${basedir}/tests/bin/bench.swf"
+		      fork="true"
+		      jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
-    	</tdsi>
-    </target>
+		</tdsi>
+	</target>
 
 	<!-- ================================= 
           target: tdsi bench inst wb       
          ================================= -->
-    <target name="tdsi bench inst wb" depends="init" description="description">
-    	<stripper in="${basedir}/tests/bin/bench_insta_wb.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+	<target name="tdsi bench inst wb" depends="init" description="description">
+		<stripper in="${basedir}/tests/bin/bench_insta_wb.swf"
+		          fork="true"
+		          jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
-    	</stripper>
-    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/bench_insta_wb.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+		</stripper>
+		<tdsi inline="true"
+		      macro="true"
+		      in="${basedir}/tests/bin/bench_insta_wb.swf"
+		      fork="true"
+		      jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
-    	</tdsi>
-    </target>
+		</tdsi>
+	</target>
 
 	<!-- ================================= 
           target: tdsi bench inst cp       
          ================================= -->
-    <target name="tdsi bench inst cp" depends="init" description="description">
-    	<stripper in="${basedir}/tests/bin/bench_insta_cp.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+	<target name="tdsi bench inst cp" depends="init" description="description">
+		<stripper in="${basedir}/tests/bin/bench_insta_cp.swf"
+		          fork="true"
+		          jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
-    	</stripper>
-    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/bench_insta_cp.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+		</stripper>
+		<tdsi inline="true"
+		      macro="true"
+		      in="${basedir}/tests/bin/bench_insta_cp.swf"
+		      fork="true"
+		      jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
-    	</tdsi>
-    </target>
+		</tdsi>
+	</target>
 
 	<!-- ================================= 
           target: tdsi bench mini         
          ================================= -->
-    <target name="tdsi bench mini" depends="init" description="description">
-    	<stripper in="${basedir}/tests/bin/bench_mini.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+	<target name="tdsi bench mini" depends="init" description="description">
+		<stripper in="${basedir}/tests/bin/bench_mini.swf"
+		          fork="true"
+		          jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
-    	</stripper>
-    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/bench_mini.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
+		</stripper>
+		<tdsi inline="true"
+		      macro="true"
+		      in="${basedir}/tests/bin/bench_mini.swf"
+		      fork="true"
+		      jvmargs="-Dapparat.7z.path=${7Z}/7z.exe">
 			<classpath refid="apparat.path" />
-    	</tdsi>
-    </target>
+		</tdsi>
+	</target>
 
 	<!-- ================================= 
           target: tdsi unit tests
          ================================= -->
-    <target name="tdsi unit tests" depends="init" description="description">
-    	<tdsi inline="true" macro="true" in="${basedir}/tests/bin/tests.swf" fork="true" jvmargs="-Dapparat.7z.path=${7Z}">
+	<target name="tdsi unit tests" depends="init" description="description">
+		<tdsi inline="true"
+		      macro="true"
+		      in="${basedir}/tests/bin/tests.swf"
+		      fork="true"
+		      jvmargs="-Dapparat.7z.path=${7Z}">
 			<classpath refid="apparat.path" />
-    	</tdsi>
-		<asmifier in="${basedir}/tests/bin/tests.swf" out="${basedir}/tests/asm" fork="true" >
+		</tdsi>
+		<asmifier in="${basedir}/tests/bin/tests.swf"
+		          out="${basedir}/tests/asm"
+		          fork="true">
 			<classpath refid="apparat.path" />
 		</asmifier >
-    </target>
+	</target>
 
-	
-	
+
+
 	<!-- - - - - - - - - - - - - - - - - - 
           target: init                      
          - - - - - - - - - - - - - - - - - -->

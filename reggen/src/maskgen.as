@@ -3,8 +3,9 @@ import avmplus.*
 const COMPONENTS : Array = ["x", "y", "z", "w"];
 
 
-const _package : String = "regs";
-const outputDir : String = "gen/regs/";
+
+const _package : String = "com.instagal.regs";
+const outputDir : String = "gen/com/instagal/regs/";
 
 var code0 : uint;
 var code1 : uint;

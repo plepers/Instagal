@@ -18,8 +18,8 @@ const OD_TYPE : uint = 6; // od depth output
 
 const TYPE_SHIFT : uint = 12;
 
-const _package : String = "regs";
-const outputDir : String = "gen/regs/";
+const _package : String = "com.instagal.regs";
+const outputDir : String = "gen/com/instagal/regs/";
 
 const swizzle : uint = (0xE4 << 24);
 

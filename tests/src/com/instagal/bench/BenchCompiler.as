@@ -1,5 +1,5 @@
 package com.instagal.bench {
-	import regs.*;
+	import com.instagal.regs.*;
 
 	import com.adobe.utils.AGALMiniAssembler;
 	import com.instagal.Shader;

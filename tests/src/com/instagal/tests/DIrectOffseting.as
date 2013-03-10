@@ -1,7 +1,6 @@
 package com.instagal.tests {
-	import regs.*;
-
 	import com.instagal.Tex;
+	import com.instagal.regs.*;
 
 	import flash.display3D.Context3DProgramType;
 	/**
