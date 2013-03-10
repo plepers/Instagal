@@ -31,6 +31,7 @@ package com.instagal.tests {
 			new Indirect_mask_off().run();
 			new SimpleMov().run();
 			new DIrectOffseting().run();
+			new ChunkAssembly().run();
 
 			stage.addChild(_console);
 		}

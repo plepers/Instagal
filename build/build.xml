@@ -77,7 +77,7 @@
 	<!-- ================================= 
           target: build reggen              
          ================================= -->
-	<target name="build reggen" depends="init" description="description">
+	<target name="gen" depends="init" description="description">
 		<java jar="${redtamarin.asc}" fork="true">
 			<arg line="-import ${redtamarin.libs.builtin}" />
 			<arg line="-import ${redtamarin.libs.toplevel}" />
@@ -88,12 +88,7 @@
 
 		<move file="${basedir}/reggen/src/reggen.abc"
 		      tofile="${basedir}/reggen/libs/reggen.abc" />
-	</target>
 
-	<!-- ================================= 
-          target: build maskgen
-         ================================= -->
-	<target name="build maskgen" depends="init" description="description">
 		<java jar="${redtamarin.asc}" fork="true">
 			<arg line="-import ${redtamarin.libs.builtin}" />
 			<arg line="-import ${redtamarin.libs.toplevel}" />
@@ -104,25 +99,15 @@
 
 		<move file="${basedir}/reggen/src/maskgen.abc"
 		      tofile="${basedir}/reggen/libs/maskgen.abc" />
-	</target>
 
-	<!-- ================================= 
-          target: run reggen              
-         ================================= -->
-	<target name="run reggen" depends="init" description="description">
 		<exec dir="${basedir}" executable="${redshell}">
 			<arg line="${basedir}/reggen/libs/reggen.abc" />
 		</exec>
-	</target>
-
-	<!-- ================================= 
-          target: run maskgen
-         ================================= -->
-	<target name="run maskgen" depends="init" description="description">
 		<exec dir="${basedir}" executable="${redshell}">
 			<arg line="${basedir}/reggen/libs/maskgen.abc" />
 		</exec>
 	</target>
+
 
 
 	<!-- ================================= 
