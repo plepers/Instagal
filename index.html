@@ -1,1 +1,271 @@
-My GitHub Page
+<!DOCTYPE html>
+<html>
+<head>
+<title>Instagal Basics</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="css/prettify.css" rel="stylesheet" media="screen">
+
+<style type="text/css" media="screen">
+.flashContent {
+	width: 100%;
+}
+
+.prettyprint {
+	font-size: 13px;
+	tab-size: 3;
+}
+</style>
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+	<a href="https://github.com/plepers/Instagal"><img
+		style="position: absolute; top: 0; left: 0; border: 0;"
+		src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"
+		alt="Fork me on GitHub"></a>
+	<div class="container-narrow">
+		<div class="container">
+			<div class="page-header">
+				<h1>Instagal Basics</h1>
+			</div>
+
+			<div class="row">
+				<div class="span3 bs-docs-sidebar" >
+					<ul class="nav nav-list bs-docs-sidenav affix-top">
+						<li><a href="#createshaders"><i class="icon-chevron-right"></i>Create a new Shader</a></li>
+						<li><a href="#masking"><i class="icon-chevron-right"></i>Swizzling / Masking</a></li>
+						<li><a href="#dynregindex"><i class="icon-chevron-right"></i>Dynamic register index</a></li>
+						<li><a href="#samplers"><i class="icon-chevron-right"></i>Texture samplers</a></li>
+						<li><a href="#indirectregs"><i class="icon-chevron-right"></i>Indirect registers</a></li>
+						<li><a href="#chunks"><i class="icon-chevron-right"></i>Shader chunks</a></li>
+					</ul>
+				</div>
+				<div class="span9">
+
+
+					<!-- ============  BASIC ============== -->
+					<section id="createshaders">
+						<div class="page-header">
+							<h1>Create a new shader</h1>
+						</div>
+
+						<p>
+							All you need is a
+							<code>Shader</code>
+						</p>
+						<pre class="prettyprint">
+var shader : Shader = new Shader( Context3DProgramType.FRAGMENT );
+
+shader.mov( oc, c0 );
+
+var agal : ByteArray = shader.complete();</pre>
+						<p>
+							In Instagal, registers have the same name in vertex or fragment
+							shader, there is no
+							<code>vc0</code>
+							,
+							<code>ft3</code>
+							,
+							<code>va2</code>
+							, but just
+							<code>c0</code>
+							,
+							<code>t3</code>
+							,
+							<code>a2</code>
+						</p>
+						<pre class="prettyprint">
+shader.mov( t0, c0 );
+shader.m44( t0, t0, c1 );
+shader.mov( oc, t0 );
+						</pre>
+					</section>
+
+
+					<!-- ============  MASKS ============== -->
+					<section id="masking">
+						<div class="page-header">
+							<h1>Swizzling / Masking</h1>
+						</div>
+						<p>
+							Use XOR
+							<code>^</code>
+							operand to mask register components
+						</p>
+						<pre class="prettyprint">
+shader.mov( t0 ^ xy, c0 ^ wz );
+shader.mov( xy ^ t0, wz ^ c0 ); // it's a real xor op</pre>
+						<p>
+							<small>Note that in agal <code>vt0.xyyy</code> is the
+								same than <code>vt0.xy</code>. Masks like <code>xyyy</code> are
+								no defined in Instagal's constants, use <code>xy</code> instead.
+							</small>
+						</p>
+					</section>
+
+
+					<!-- ====== DYNAMIC REGISTER INDEX   ====== -->
+					<section id="dynregindex">
+						<div class="page-header">
+							<h1>Dynamic register index</h1>
+						</div>
+						<p>You can use addition or substraction to offset a register</p>
+						<pre class="prettyprint">
+var i : int = 5;
+shader.mov( t0+i, c4 );
+// "mov vt5, vc4 "</pre>
+						<p>Following examples produce the same agal bytecode.</p>
+						<pre class="prettyprint">
+shader.mov( t5, c4 );</pre>
+
+						<pre class="prettyprint">
+shader.mov( t2 + 3, c6 - 2 );</pre>
+
+						<pre class="prettyprint">
+var i : int = 3;
+shader.mov( t2 + i, c7 - i );</pre>
+						<p>Of course, it also work with mask</p>
+						<pre class="prettyprint">
+shader.mov( t2 + 3 ^ xyz, c6 - 2 ^ xyz );
+shader.mov( t2 ^ xyz + 3, c6 ^ xyz - 2 );
+
+var i : int = 3;
+shader.mov( t2 + i ^ xyz, c7 - i ^ xyz );</pre>
+
+					</section>
+					
+
+					<!-- ====== TEXTURE SAMPLERS   ====== -->
+					<section id="samplers">
+						<div class="page-header">
+							<h1>Texture samplers</h1>
+						</div>
+						<p>
+							Simply use pipe
+							<code>|</code>
+							, or OR operand, to define samplers options
+						</p>
+						<pre class="prettyprint">
+shader.tex( t0, v0 ^ xy, s0 | Tex.REPEAT | Tex.LINEAR | Tex.MIPLINEAR );</pre>
+						<p>
+							You can omit options. This produce
+							<code>2d, nearest, nomip, clamp, rgba</code>
+							sampler
+						</p>
+						<pre class="prettyprint">
+shader.tex( t0, v0 ^ xy, s0 );</pre>
+						<p>
+							To apply a LOD bias, use
+							<code>Tex.bias()</code>
+							method like other options
+						</p>
+						<pre class="prettyprint">
+shader.tex( t0, v0 ^ xy, s0 | Tex.REPEAT | Tex.bias( 6.4 ) );</pre>
+
+						<p>
+							And like other registers, you can offset sampler index with a simple addition
+						</p>
+						<pre class="prettyprint">
+shader.tex( t0, v0 ^ xy, s0+4 | Tex.REPEAT );</pre>
+
+					</section>
+
+					
+					
+					
+					<!-- ====== INDIRECT REGISTERS   ====== -->
+					<section id="indirectregs">
+						<div class="page-header">
+							<h1>Indirect registers</h1>
+						</div>
+						<p>
+							In agal you can write
+							<code>vc[vt0.y]</code>
+							to define "indirect" register. To achieve the same in Instagal
+							use the provided
+							<code>c()</code>
+							global Function
+						</p>
+						<p>
+							<small>Note that Indirect register are only available on
+								vertex constants registers ( vc ), that'w why there is no <code>a()</code>,
+								<code>t()</code> or <code>v()</code> functions.
+							</small>
+						</p>
+						<pre class="prettyprint">
+shader.mov( t0, c( t0^y ) );
+// mov vt0, vc[vt0.y]</pre>
+						<p>
+							To add an offset to indirect registers
+							<code>vc[vt0.y+4]</code>
+							, simply add it to the <b>function result</b>. Indirect offsets
+							must be positive.
+						</p>
+						<pre class="prettyprint">
+shader.mov( t0, c( t0^y ) + 4 );</pre>
+
+
+					</section>
+					
+					
+					<!-- ====== SHADER CHUNK   ====== -->
+					
+					<section id="chunks">
+						<div class="page-header">
+							<h1>Shader chunks</h1>
+						</div>
+						<p>For more flexibility, Instagal provide <code>ShaderChunks</code> objects. <code>ShaderChunks</code> are incomplete shader parts which can be append to a <code>Shader</code> to produce the final bytecode.</p>
+						<p><code>ShaderChunks</code> behave exactly the same than <code>Shader</code> object, except they have no constructor options (they don't care about "vertex" or "fragment")</p>
+						<pre class="prettyprint">
+var projection : ShaderChunk = new ShaderChunk();
+projection.m44( t0, a0, c1 );
+projection.m33( v0, a1, c1 );
+
+var texcoord : ShaderChunk = new ShaderChunk();
+texcoord.mov( v1, a2 );
+
+var shader : Shader = new Shader( Context3DProgramType.VERTEX );
+shader.append( projection );
+shader.append( texcoord );
+shader.mov( op, t0 );
+
+var agal : ByteArray = shader.complete();</pre>
+
+					</section>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/prettify.js"></script>
+	<script src="js/bootstrap-scrollspy.js"></script>
+	<script>
+		!function($) {
+			$(function() {
+				
+				var $window = $(window);
+				
+				window.prettyPrint && prettyPrint()
+				
+				setTimeout(function () {
+			      $('.bs-docs-sidenav').affix({
+			        offset: {
+			          top: function () { return $window.width() <= 980 ? 290 : 20 }
+			        , bottom: 180
+			        }
+			      })
+			    }, 100)
+			})
+			
+		}(window.jQuery)
+		
+		
+    
+	</script>
+</body>
+</html>
+
