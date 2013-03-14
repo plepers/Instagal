@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
 <link href="css/prettify.css" rel="stylesheet" media="screen">
 
 <style type="text/css" media="screen">
@@ -19,28 +20,25 @@
 </style>
 </head>
 <body data-spy="scroll" data-target=".bs-docs-sidebar">
-	<a href="https://github.com/plepers/Instagal"><img
-		style="position: absolute; top: 0; left: 0; border: 0;"
-		src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"
-		alt="Fork me on GitHub"></a>
-	<div class="container-narrow">
-		<div class="container">
+	<a href="https://github.com/plepers/Instagal"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+		<div class="container-fluid">
 			<div class="page-header">
 				<h1>Instagal Basics</h1>
 			</div>
 
-			<div class="row">
-				<div class="span3 bs-docs-sidebar" >
-					<ul class="nav nav-list bs-docs-sidenav affix-top">
-						<li><a href="#createshaders"><i class="icon-chevron-right"></i>Create a new Shader</a></li>
-						<li><a href="#masking"><i class="icon-chevron-right"></i>Swizzling / Masking</a></li>
-						<li><a href="#dynregindex"><i class="icon-chevron-right"></i>Dynamic register index</a></li>
-						<li><a href="#samplers"><i class="icon-chevron-right"></i>Texture samplers</a></li>
-						<li><a href="#indirectregs"><i class="icon-chevron-right"></i>Indirect registers</a></li>
-						<li><a href="#chunks"><i class="icon-chevron-right"></i>Shader chunks</a></li>
-					</ul>
-				</div>
-				<div class="span9">
+					<div class="bs-docs-sidebar affix-top span2" >
+						<ul class="nav nav-list bs-docs-sidenav">
+							<li><a href="#createshaders">Create a new Shader</a></li>
+							<li><a href="#masking">Swizzling / Masking</a></li>
+							<li><a href="#dynregindex">Dynamic register index</a></li>
+							<li><a href="#samplers">Texture samplers</a></li>
+							<li><a href="#indirectregs">Indirect registers</a></li>
+							<li><a href="#chunks">Shader chunks</a></li>
+							<li><a href="#bench">Benchmark</a></li>
+						</ul>
+					</div>
+				
+				<div class="span10">
 
 
 					<!-- ============  BASIC ============== -->
@@ -232,11 +230,235 @@ shader.mov( op, t0 );
 var agal : ByteArray = shader.complete();</pre>
 
 					</section>
+					<section id="bench">
+						<div class="page-header">
+							<h1>Benchmark</h1>
+						</div>
+						<div class="row">
+							<div class="span5">
 
+
+								<div class="flashContent">
+									<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+										width="100%" height="250px" id="mini" align="middle">
+										<param name="movie" value="bench_mini.swf" />
+										<param name="quality" value="high" />
+										<param name="wmode" value="direct" />
+										<param name="scale" value="noscale" />
+										<param name="salign" value="tl" />
+										<param name="bgcolor" value="#EEEEEE" />
+										<param name="allowScriptAccess" value="always" />
+										<!--[if !IE]>-->
+										<object class="swfobj" type="application/x-shockwave-flash"
+											data="bench_mini.swf" width="100%" height="250px">
+											<param name="movie" value="bench_mini.swf" />
+											<param name="quality" value="high" />
+											<param name="wmode" value="direct" />
+											<param name="scale" value="noscale" />
+											<param name="salign" value="tl" />
+											<param name="bgcolor" value="#EEEEEE" />
+											<param name="allowScriptAccess" value="sameDochart_leaf" />
+											<!--<![endif]-->
+											<a href="http://www.adobe.com/go/getflash"> <img
+												src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif"
+												alt="Obtenir Adobe Flash Player" />
+											</a>
+											<!--[if !IE]>-->
+										</object>
+										<!--<![endif]-->
+									</object>
+								</div>
+							</div>
+							<div class="span5">
+								<div class="flashContent">
+									<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+										width="100%" height="250px" id="insta" align="middle">
+										<param name="movie" value="bench_insta_wb.swf" />
+										<param name="quality" value="high" />
+										<param name="wmode" value="direct" />
+										<param name="scale" value="noscale" />
+										<param name="salign" value="tl" />
+										<param name="bgcolor" value="#EEEEEE" />
+										<param name="allowScriptAccess" value="always" />
+										<!--[if !IE]>-->
+										<object type="application/x-shockwave-flash"
+											data="bench_insta_wb.swf" width="100%" height="250px">
+											<param name="movie" value="bench_insta_wb.swf" />
+											<param name="quality" value="high" />
+											<param name="wmode" value="direct" />
+											<param name="scale" value="noscale" />
+											<param name="salign" value="tl" />
+											<param name="bgcolor" value="#EEEEEE" />
+											<param name="allowScriptAccess" value="sameDochart_leaf" />
+											<!--<![endif]-->
+											<a href="http://www.adobe.com/go/getflash"> <img
+												src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif"
+												alt="Obtenir Adobe Flash Player" />
+											</a>
+											<!--[if !IE]>-->
+										</object>
+										<!--<![endif]-->
+									</object>
+
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="span5">
+								<pre class="prettyprint">
+var shader : Shader;
+var frame : int = 200; // ms
+var agal : ByteArray;
+
+
+// fairplay, create only one assembler
+var ama : AGALMiniAssembler = new AGALMiniAssembler();
+
+// fairplay, construct the code out of the loop
+var vertexCode : String =  [
+	"mov vt0, va0",
+	"mov vt2, va2",
+	"m44 vt7, vt0, vc0",
+	"mul op, vt7, vc4",
+	"mov v0, va1",
+	"m44 vt1.xyz, vt0, vc5",
+	"mov vt1.w, vt0.w",
+	"m33 vt3.xyz, vt2.xyz, vc9",
+	"mov vt3.w, vt2.w",
+	"mov v1, vt3",
+	"sub vt2, vc13, vt1",
+	"nrm vt4.xyz,vt2.xyz",
+	"dp3 vt1.w, vt3.xyz, vt4.xyz",
+	"sub v2.w, vc13.w, vt1.w",
+	"add vt1.w, vt1.w, vt1.w",
+	"mul vt1.xyz, vt3.xyz, vt1.w",					
+	"sub vt1.xyz, vt1.xyz, vt4.xyz",				
+	"nrm v2.xyz, vt1.xyz" 
+].join( '\n' );
+
+var fragmentCode : String =  [
+	"mov ft0 	   ,  fc2",
+	"tex ft1 	   ,  v1      , fs0 &lt;cube,nearest,clamp&gt;",
+	"div ft1.w     ,  ft1.w   , fc0.z",
+	"sub ft1.w     ,  ft1.w   , fc3.y",
+	"pow ft1.w     ,  fc3.x   , ft1.w",
+	"mul ft1.xyz   ,  ft1.xyz , ft1.w",
+	"mul ft1.xyz   ,  ft1.xyz , fc3.z",
+	"mul ft0.xyz   ,  ft1.xyz , ft0.xyz	",
+	"tex ft1       ,  v2.xyz  , fs1 &lt;cube,nearest,clamp&gt;",
+	"div ft1.w     ,  ft1.w   , fc0.z",
+	"sub ft1.w     ,  ft1.w   , fc4.z",
+	"pow ft1.w     ,  fc4.x   , ft1.w",
+	"mul ft1.xyz   ,  ft1.xyz , ft1.w",
+	"pow ft1.w     ,  v2.w    , fc4.y",
+	"mul ft1.w     ,  ft1.w   , fc1.w",
+	"add ft1.w     ,  ft1.w   , fc1.z",
+	"mul ft1.xyz   ,  ft1.xyz , ft1.w",
+	"add ft0.xyz   ,  ft0.xyz , ft1.xyz",			
+	"tex ft1       ,  v0      , fs2 &lt;2d,nearest,clamp,dxt1&gt;",
+	"mul ft0.xyz   ,  ft0.xyz , ft1.x",
+	"mul ft0.xyz   ,  ft0.xyz , fc5.x",
+	"pow ft0.xyz   ,  ft0.xyz , fc5.y",
+	"mov oc        ,  ft0"
+].join( '\n' );
+
+var st : int;
+
+st = getTimer();
+
+// fairplay, use "vertex" litteral
+while( getTimer() - st &lt; frame){
+	agal = ama.assemble( "vertex", vertexCode );
+	compileNum++;
+}
+
+st = getTimer();
+
+// fairplay, use "fragment" litteral
+while( getTimer() - st &lt; frame){
+	agal = ama.assemble( "fragment", fragmentCode );
+	compileNum++;
+}
+								</pre>
+							</div>
+							<div class="span5">
+								<pre class="prettyprint">
+var s : Shader;
+var frame : int = 1000;
+var agal : ByteArray = new ByteArray();
+var st : int;
+
+st = getTimer();
+
+while( getTimer() - st &lt; frame){
+	s = new Shader( Context3DProgramType.VERTEX );
+	
+	s.mov( t0,     a0               );
+	s.mov( t2,     a2	             );
+	s.m44( t7,     t0,       c0     );
+	s.mul( op,     t7,       c4     );
+	s.mov( v0,     a1               );
+	s.m44( t1^xyz, t0,       c5     );
+	s.mov( t1^w,   t0^w             );
+	s.m33( t3^xyz, t2^xyz,   c9     );
+	s.mov( t3^w,   t2^w             );
+	s.mov( v1,     t3               );
+	s.sub( t2,     c13,      t1     );
+	s.nrm( t4^xyz, t2^xyz           );
+	s.dp3( t1^w,   t3^xyz,   t4^xyz );
+	s.sub( v2^w,   c13^w,    t1^w   );
+	s.add( t1^w,   t1^w,     t1^w   );
+	s.mul( t1^xyz, t3^xyz,   t1^w   );
+	s.sub( t1^xyz, t1^xyz,   t4^xyz );
+	s.nrm( v2^xyz, t1^xyz           );
+	
+	s.writeBytes( agal );
+	
+	compileNum++;
+}
+
+st = getTimer();
+
+while( getTimer() - st &lt; frame){
+	s = new Shader( Context3DProgramType.FRAGMENT );
+	s.mov( t0 	   , c2        );      
+	s.tex( t1 	   , v1       ,s0 
+		| Tex.CUBE | Tex.NEAREST | Tex.CLAMP );
+	s.div( t1^w   , t1^w     ,c0^z	  );
+	s.sub( t1^w   , t1^w     ,c3^y	  );
+	s.pow( t1^w   , c3^x     ,t1^w	  );
+	s.mul( t1^xyz , t1^xyz   ,t1^w	  );
+	s.mul( t1^xyz , t1^xyz   ,c3^z	  );
+	s.mul( t0^xyz , t1^xyz   ,t0^xyz );
+	s.tex( t1     , v2^xyz   ,s1 
+		| Tex.CUBE | Tex.NEAREST | Tex.CLAMP );
+	s.div( t1^w   , t1^w     ,c0^z	  );
+	s.sub( t1^w   , t1^w     ,c4^z	  );
+	s.pow( t1^w   , c4^x     ,t1^w	  );
+	s.mul( t1^xyz , t1^xyz   ,t1^w	  );
+	s.pow( t1^w   , v2^w     ,c4^y	  );
+	s.mul( t1^w   , t1^w     ,c1^w	  );
+	s.add( t1^w   , t1^w     ,c1^z	  );		
+	s.mul( t1^xyz , t1^xyz   ,t1^w	  );			
+	s.add( t0^xyz , t0^xyz   ,t1^xyz );
+	s.tex( t1     , v0       ,s2
+		| Tex.NEAREST | Tex.CLAMP | Tex.DXT1 );
+	s.mul( t0^xyz , t0^xyz   ,t1^x   );
+	s.mul( t0^xyz , t0^xyz   ,c5^x   );
+	s.pow( t0^xyz , t0^xyz   ,c5^y   );
+	s.mov( oc     , t0               );
+	
+	s.writeBytes( agal );
+	
+	compileNum++;
+}
+								</pre>
+							</div>
+						</div>
+					</section>
 				</div>
 			</div>
 
-		</div>
 	</div>
 
 	<script src="http://code.jquery.com/jquery.js"></script>
@@ -251,14 +473,8 @@ var agal : ByteArray = shader.complete();</pre>
 				
 				window.prettyPrint && prettyPrint()
 				
-				setTimeout(function () {
-			      $('.bs-docs-sidenav').affix({
-			        offset: {
-			          top: function () { return $window.width() <= 980 ? 290 : 20 }
-			        , bottom: 180
-			        }
-			      })
-			    }, 100)
+				
+
 			})
 			
 		}(window.jQuery)
