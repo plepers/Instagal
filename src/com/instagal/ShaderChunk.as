@@ -213,7 +213,7 @@
 			_memoryBlock = null;
 		}
 		
-		public function push( chunk : ShaderChunk, dispose : Boolean = true ) : void {
+		public function append( chunk : ShaderChunk, dispose : Boolean = true ) : void {
 			_ptr = chunk.copy( _ptr );
 			if( dispose ) 
 				chunk.dispose();

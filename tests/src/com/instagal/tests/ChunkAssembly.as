@@ -201,15 +201,15 @@ package com.instagal.tests {
 			chunkH.sub(t1 ^ w, t1 ^ w, c3 ^ y);
 			
 			
-			chunkB.push(chunkC);
-			chunkB.push(chunkD);
-			chunkA.push(chunkB);
-			chunkE.push(chunkF);
-			chunkG.push(chunkH);
-			chunkE.push(chunkG);
-			chunkA.push(chunkE);
+			chunkB.append(chunkC);
+			chunkB.append(chunkD);
+			chunkA.append(chunkB);
+			chunkE.append(chunkF);
+			chunkG.append(chunkH);
+			chunkE.append(chunkG);
+			chunkA.append(chunkE);
 			
-			_shader.push(chunkA);
+			_shader.append(chunkA);
 		}
 	}
 }
