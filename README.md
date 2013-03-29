@@ -1,7 +1,7 @@
 Instagal
 ===========
 
-The fastest way to compile agal bytecode.
+Lightning fast, apparat powered agal assembler.
 
 [Documentation and download](http://plepers.github.com/Instagal/)
 

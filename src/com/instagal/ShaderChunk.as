@@ -1,6 +1,4 @@
 /*
- * This file is part of Apparat.
- *
  * Copyright (C) 2013 Pierre Lepers
  *
  * This library is free software; you can redistribute it and/or
@@ -19,7 +17,6 @@
  */
  package com.instagal {
 	import apparat.memory.Memory;
-	import apparat.asm.__asm;
 	import apparat.inline.__byRef;
 	import apparat.memory.MemoryBlock;
 	import apparat.memory.MemoryPool;

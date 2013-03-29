@@ -1,6 +1,5 @@
 /*
- * This file is part of Apparat.
- *
+ * 
  * Copyright (C) 2013 Pierre Lepers
  *
  * This library is free software; you can redistribute it and/or

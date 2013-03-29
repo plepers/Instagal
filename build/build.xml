@@ -45,20 +45,34 @@
           target: swc              
          ================================= -->
 	<target name="swc" depends="init" description="description">
-		<compc output="${basedir}/bin/instagal.swc">
+		<!--
+		       load-externs="${basedir}/build/excludes.xml"
+		
+		-->
+		
+		<compc output="${basedir}/bin/instagal_tmp.swc"
+		       link-report="${basedir}/bin/report.xml" debug="false">
 			<library-path dir="${basedir}/libs" includes="**/*.swc" />
 			<source-path path-element="${basedir}/src" />
 			<source-path path-element="${basedir}/gen" />
 			<include-sources dir="${basedir}/gen" includes="**/*.as" />
 			<include-sources dir="${basedir}/src" includes="**/*.as" />
 		</compc>
+		
 		<tdsi inline="true"
 		      macro="true"
-		      in="${basedir}/bin/instagal.swc"
+		      in="${basedir}/bin/instagal_tmp.swc"
+		      out="${basedir}/bin/instagal.swc"
 		      fork="true"
 		      jvmargs="-Dapparat.7z.path=${7Z}">
 			<classpath refid="apparat.path" />
 		</tdsi>
+		<!--asmifier in="${basedir}/bin/instagal.swc"
+		          out="${basedir}/bin/asm"
+		          fork="true">
+			<classpath refid="apparat.path" />
+		</asmifier -->
+		<delete file="${basedir}/bin/instagal_tmp.swc"/>
 	</target>
 
 	<!-- ================================= 

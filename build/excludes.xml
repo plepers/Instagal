@@ -1,0 +1,23 @@
+<report>
+	<scripts>
+    <script name="D:\work\workspaces\as3\Instagal\src\com\instagal\Agal.as" mod="1363254367919" size="10928" optimizedsize="4855">
+      <def id="com.instagal:Agal" />
+      <pre id="apparat.inline:Macro" />
+      <dep id="apparat.asm:PushUInt" />
+      <dep id="apparat.asm:Add" />
+      <dep id="apparat.asm:SetLocal" />
+      <dep id="apparat.asm:BitAnd" />
+      <dep id="apparat.asm:PushByte" />
+      <dep id="apparat.asm:SetInt" />
+      <dep id="apparat.asm:__asm" />
+      <dep id="apparat.asm:GetLocal" />
+      <dep id="apparat.asm:BitOr" />
+      <dep id="apparat.asm:ShiftRightUnsigned" />
+      <dep id="apparat.memory:Memory" />
+      <dep id="apparat.asm:PushInt" />
+      <dep id="AS3" />
+      <dep id="apparat.asm:PushShort" />
+      <dep id="apparat.asm:ShiftLeft" />
+    </script>
+	</scripts>
+</report>
