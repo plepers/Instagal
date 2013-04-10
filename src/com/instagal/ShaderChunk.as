@@ -27,9 +27,9 @@
 	 */
 	public class ShaderChunk {
 		
-		internal var _memoryBlock : MemoryBlock;
+		protected var _memoryBlock : MemoryBlock;
 		
-		internal var _ptr : uint;
+		protected var _ptr : uint;
 
 		public function ShaderChunk() {
 			_memoryBlock = ShaderChunk.getFreeBlock();
