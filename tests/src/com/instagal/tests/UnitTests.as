@@ -32,6 +32,7 @@ package com.instagal.tests {
 			new SimpleMov().run();
 			new DIrectOffseting().run();
 			new ChunkAssembly().run();
+			new DumpVertexTest().run();
 
 			stage.addChild(_console);
 		}
