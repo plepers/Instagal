@@ -68,6 +68,7 @@ for( i = 0; i<S_NUM; i++ ) {
 val = ( O_TYPE << TYPE_SHIFT ) + swizzle;
 FileSystem.write( outputDir+"op.as", constClass( "op" , val ) );
 FileSystem.write( outputDir+"oc.as", constClass( "oc" , val ) );
+FileSystem.write( outputDir+"o.as", constClass( "o" , val ) );
 
 val = ( OD_TYPE << TYPE_SHIFT ) + swizzle;
 FileSystem.write( outputDir+"od.as", constClass( "od" , val ) ); 

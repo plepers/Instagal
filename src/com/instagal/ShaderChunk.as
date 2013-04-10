@@ -27,9 +27,9 @@
 	 */
 	public class ShaderChunk {
 		
-		protected var _memoryBlock : MemoryBlock;
+		internal var _memoryBlock : MemoryBlock;
 		
-		protected var _ptr : uint;
+		internal var _ptr : uint;
 
 		public function ShaderChunk() {
 			_memoryBlock = ShaderChunk.getFreeBlock();
@@ -217,8 +217,8 @@
 		}
 		
 		internal function copy( pos : uint ) : uint {
-			var numTokens : uint = ( _ptr - _memoryBlock.position ) / 24;
 			var p : uint = _memoryBlock.position;
+			var numTokens : uint = ( _ptr - p ) / 24;
 			
 			while( numTokens-- > 0 ) {
 				Memory.writeInt( Memory.readInt( p     ), pos      );

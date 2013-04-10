@@ -46,24 +46,22 @@
 		}
 
 
-		public function writeBytes( res : ByteArray ) : void {
+		public function writeBytes( res : ByteArray, dispose : Boolean = true ) : void {
 			var len : int = _ptr - _memoryBlock.position;
 			res.position = 0;
 			res.length = len;
 			res.writeBytes(ApplicationDomain.currentDomain.domainMemory, _memoryBlock.position, len );
-
-			ShaderChunk.releaseBlock(_memoryBlock);
-			_memoryBlock = null;
+			
+			if( dispose ) this.dispose();
 		}
 		
 		
-		public function complete() : ByteArray {
+		public function complete( dispose : Boolean = true ) : ByteArray {
 			var res : ByteArray = new ByteArray();
 			res.endian = Endian.LITTLE_ENDIAN;
 			res.writeBytes(ApplicationDomain.currentDomain.domainMemory, _memoryBlock.position, _ptr - _memoryBlock.position);
 
-			ShaderChunk.releaseBlock(_memoryBlock);
-			_memoryBlock = null;
+			if( dispose ) this.dispose();
 
 			return res;
 		}
