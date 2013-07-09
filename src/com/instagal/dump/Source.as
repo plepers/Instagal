@@ -39,10 +39,13 @@ package com.instagal.dump {
 				_indirectType = (_srcB >>> 8 ) & 0xF;
 				_indirectComp = (_srcB >>> 16) & 3;
 			}
+			
 			_swizzle = (_srcA >>> 24 ) & 0xFF;
+			
 		}
 	
 		public function writeExternal(output : IDataOutput) : void {
+			
 		}
 	
 		public static function readSource( input : IDataInput ) : Source {

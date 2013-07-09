@@ -22,9 +22,9 @@ package com.instagal.dump {
 		public function readExternal(input : IDataInput) : void {
 			_dest = input.readUnsignedInt();
 			
-			_type  = (_dest & 0x0F000000) >>> 24;
-			_index = (_dest & 0xFFFF);
-			_mask  = (_dest & 0xf0000) >>> 16;
+			_type  = ( _dest & 0x0F000000) >>> 24;
+			_index = ( _dest & 0xFFFF );
+			_mask  = ( _dest & 0xf0000) >>> 16;
 		}
 	
 		public function writeExternal(output : IDataOutput) : void {

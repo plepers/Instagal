@@ -256,7 +256,7 @@
 }
 
 const AGAL_MAX_TOKENS : uint = 1024;
-const AGAL_TOKENS_LEN : uint = 192;
+const AGAL_TOKENS_LEN : uint = 24;
 
 const AGAL_TOKENS_ALLOC : uint = AGAL_TOKENS_LEN * AGAL_MAX_TOKENS;
  

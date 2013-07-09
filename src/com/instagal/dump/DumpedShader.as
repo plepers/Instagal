@@ -16,20 +16,22 @@ package com.instagal.dump {
 			_header = Header.readHeader(input);
 			
 			_tokens = new Vector.<Token>();
+			
 			while( input.bytesAvailable )
 				_tokens.push( Token.readToken(input) );
 		}
-	
+		
 		public function writeExternal(output : IDataOutput) : void {
+			
 		}
-
+		
 		public function get tokens() : Vector.<Token> {
 			return _tokens;
 		}
-
+		
 		public function get header() : Header {
 			return _header;
 		}
-	
+		
 	}
 }
