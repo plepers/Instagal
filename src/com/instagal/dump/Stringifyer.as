@@ -5,9 +5,32 @@ package com.instagal.dump {
 	 */
 	public class Stringifyer {
 
-		public static function toAgal( dumped : DumpedShader ) : String {
+		public static function srcToAgal( src : Source, types :  Vector.<String>, data : Vector.<Number> = null ) : String {
+
+			var str : String = "";
+
+
+
+			str = types[ src.type ];
+			if( src.isIndirect() ) 
+				str += "["+types[ src.indirectType ] + src.index + "." + COMPS[ src.indirectComp ] + (( src.indirectOffset>0 )? "+"+src.indirectOffset:"" )+"]";
+			else
+				str += src.index;
 			
-			const spaces : String = "                  ";
+			if( src.swizzle != 0xE4 )
+				str += "."+getSwizzle( src.swizzle );
+
+			if( src.type == 1 && data != null) { //consts
+				str+= " ("+getValues( src.swizzle, src.index*4, data )+")";
+			}
+				
+			str += spaces.substr( 0, 17-str.length );
+			return str;
+
+		}
+
+		public static function toAgal( dumped : DumpedShader, data : Vector.<Number> = null ) : String {
+			
 			var res : String = "";
 			var types : Vector.<String> = (dumped.header.type == 1) ? FTYPES : VTYPES;
 			var tokens : Vector.<Token> = dumped.tokens;
@@ -33,34 +56,14 @@ package com.instagal.dump {
 				
 				if( !src.isNull() ) {
 					res += " , ";
-					str = types[ src.type ];
-					if( src.isIndirect() ) 
-						str += "["+types[ src.indirectType ] + src.index + "." + COMPS[ src.indirectComp ] + (( src.indirectOffset>0 )? "+"+src.indirectOffset:"" )+"]";
-					else
-						str += src.index;
-					
-					if( src.swizzle != 0xE4 )
-						str += "."+getSwizzle( src.swizzle );
-
-					str += spaces.substr( 0, 17-str.length );
-					res += str;
+					res += srcToAgal(src, types, data);
 				}
 
 				src = token.src2;
 				
 				if( !src.isNull() ) {
 					res += " , ";
-					str = types[ src.type ];
-					if( src.isIndirect() ) 
-						str += "["+types[ src.indirectType ] + src.index + "." + COMPS[ src.indirectComp ] + (( src.indirectOffset>0 )? "+"+src.indirectOffset:"" )+"]";
-					else
-						str += src.index;
-					
-					if( src.swizzle != 0xE4 )
-						str += "."+getSwizzle( src.swizzle );
-						
-					str += spaces.substr( 0, 17-str.length );
-					res += str;
+					res += srcToAgal(src, types, data);
 				}
 				
 				res += "\n";
@@ -71,7 +74,6 @@ package com.instagal.dump {
 		}
 
 		public static function toInstagal( dumped : DumpedShader ) : String {
-			const spaces : String = "                  ";
 			var res : String = "";
 			var tokens : Vector.<Token> = dumped.tokens;
 			var token : Token;
@@ -157,6 +159,27 @@ package com.instagal.dump {
 			return COMPS[code0]+COMPS[code1]+COMPS[code2]+COMPS[code3];
 		}
 
+		
+		private static function getValues(swizzle : uint, index : int, data : Vector.<Number>) : String {
+			var code3 : uint = (swizzle>>6)&3;
+			var code2 : uint = (swizzle>>4)&3;
+			var code1 : uint = (swizzle>>2)&3;
+			var code0 : uint = swizzle&3;
+			
+			
+			if( code2 == code3 ) {
+				if( code1 == code3 ) {
+					if( code0 == code3 ) 
+						return data[index + code0].toFixed( 5 );
+					else 
+						return data[index + code0].toFixed( 5 )+","+data[index + code1].toFixed( 5 );
+				} else 
+					return data[index + code0].toFixed( 5 )+","+data[index + code1].toFixed( 5 )+","+data[index + code2].toFixed( 5 );
+			}
+			
+			return data[index + code0].toFixed( 5 )+","+data[index + code1].toFixed( 5 )+","+data[index + code2].toFixed( 5 )+","+data[index + code3].toFixed( 5 );
+		}
+
 		private static function getMask(mask : uint) : String {
 			var p : String = "";
 			if( (mask & 0x8) ) p += "w";
@@ -169,6 +192,7 @@ package com.instagal.dump {
 	}
 }
 
+const spaces : String = "                  ";
 
 
 const COMPS : Vector.<String> = new <String>[
