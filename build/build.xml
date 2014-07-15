@@ -50,6 +50,7 @@
 		
 		-->
 		
+		<mkdir dir="${basedir}/libs"/>
 		<compc output="${basedir}/bin/instagal_tmp.swc"
 		       link-report="${basedir}/bin/report.xml" debug="false">
 			<library-path dir="${basedir}/libs" includes="**/*.swc" />
@@ -92,6 +93,7 @@
           target: build reggen              
          ================================= -->
 	<target name="gen" depends="init" description="description">
+		<mkdir dir="${basedir}/gen/com/instagal/regs/"/>
 		<java jar="${redtamarin.asc}" fork="true">
 			<arg line="-import ${redtamarin.libs.builtin}" />
 			<arg line="-import ${redtamarin.libs.toplevel}" />
